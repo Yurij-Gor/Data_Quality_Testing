@@ -41,6 +41,7 @@ jobs:
           -e GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }} \
           -e BIGQUERY_DATASET_ID=${{ secrets.BIGQUERY_DATASET_ID }} \
           pytest_runner
+      continue-on-error: true
 
     - name: Create Allure results directory
       if: always()

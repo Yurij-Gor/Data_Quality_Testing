@@ -62,12 +62,14 @@ jobs:
       run: docker cp data_quality_tests:/tests_project/test_results ./test_results
 
     - name: Set up JDK 17 for Allure Report
+      if: always()
       uses: actions/setup-java@v2
       with:
         distribution: 'temurin'
         java-version: '17'
 
     - name: Install Allure
+      if: always()
       run: |
         sudo apt-get update
         sudo apt-get install allure -y

@@ -50,6 +50,13 @@ jobs:
       if: always()
       run: docker cp data_quality_tests:/tests_project/test_results ./test_results
 
+    - name: Set up JDK 17
+      if: always()
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
     - name: Generate Allure Report
       if: always()
       run: |

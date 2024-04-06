@@ -43,16 +43,20 @@ jobs:
           pytest_runner
 
     - name: Create Allure results directory
+      if: always()
       run: mkdir -p test_results && sudo chmod -R 777 test_results
 
     - name: Copy Allure report from Docker container
+      if: always()
       run: docker cp data_quality_tests:/tests_project/test_results ./test_results
 
     - name: Generate Allure Report
+      if: always()
       run: |
         docker run --rm -v $(pwd)/test_results:/test_results pytest_runner allure generate /test_results -o /test_results/allure-report --clean
 
     - name: Deploy to GitHub Pages
+      if: always()
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.MY_GITHUB_TOKEN }}

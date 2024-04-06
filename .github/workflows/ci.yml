@@ -37,6 +37,15 @@ jobs:
         echo $GOOGLE_APPLICATION_CREDENTIALS_JSON > /tmp/keys/GOOGLE_APPLICATION_CREDENTIALS.json
         docker run --name data_quality_tests -v /tmp/keys:/keys -e GOOGLE_APPLICATION_CREDENTIALS=/keys/GOOGLE_APPLICATION_CREDENTIALS.json -e GCS_BUCKET_NAME -e GCP_PROJECT_ID -e BIGQUERY_DATASET_ID pytest_runner
 
+    - name: Check GOOGLE_APPLICATION_CREDENTIALS_JSON
+      run: |
+        if [[ -z "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}" ]]; then
+          echo "Secret GOOGLE_APPLICATION_CREDENTIALS_JSON is empty."
+          exit 1
+        else
+          echo "Secret GOOGLE_APPLICATION_CREDENTIALS_JSON is set."
+        fi
+
     - name: Authenticate to Google Cloud
       uses: google-github-actions/auth@v0.4.0
       with:

@@ -66,13 +66,12 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Install Allure commandline
-      if: always()
-      run: sudo apt-get install allure -y
-
     - name: Generate Allure Report
       if: always()
-      run: allure generate ./test_results -o ./test_results/allure-report --clean
+      uses: simple-elf/allure-report-action@v1.0
+      with:
+        allure_results: ./test_results
+        allure_report: ./test_results/allure-report
 
     - name: Archive Allure report artifacts
       if: always()

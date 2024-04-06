@@ -61,21 +61,24 @@ jobs:
           pytest_runner
 
     - name: Copy Allure report from Docker container
+      if: always()
       run: docker cp data_quality_tests:/tests_project/test_results ./test_results
 
     - name: Generate Allure Report
+      if: always()
       run: |
         docker run --rm -v $(pwd)/test_results:/test_results pytest_runner allure generate /test_results -o /test_results/allure-report --clean
 
     - name: Archive Allure report artifacts
+      if: always()
       uses: actions/upload-artifact@v2
       with:
         name: allure-report
         path: test_results/allure-report
 
     - name: Deploy to GitHub Pages
+      if: always()
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./test_results/allure-report
-        

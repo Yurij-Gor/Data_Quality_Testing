@@ -48,6 +48,10 @@ jobs:
       if: always()
       run: docker cp data_quality_tests:/tests_project/test_results ./test_results
 
+    - name: List test results
+      if: always()
+      run: ls -lR ./test_results
+
     - name: Set up JDK 17
       if: always()
       uses: actions/setup-java@v2

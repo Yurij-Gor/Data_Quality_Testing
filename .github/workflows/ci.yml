@@ -61,6 +61,7 @@ jobs:
         GCS_BUCKET_NAME: ${{ secrets.GCS_BUCKET_NAME }}
         GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
         BIGQUERY_DATASET_ID: ${{ secrets.BIGQUERY_DATASET_ID }}
+        JAVA_HOME: ${{ steps.setup-java.outputs.java-home }}
       run: |
         docker run --name data_quality_tests \
           -v /tmp/keys:/keys \
@@ -68,6 +69,7 @@ jobs:
           -e GCS_BUCKET_NAME \
           -e GCP_PROJECT_ID \
           -e BIGQUERY_DATASET_ID \
+          -e JAVA_HOME="${{ steps.setup-java.outputs.java-home }}" \
           pytest_runner
 
     - name: Copy Allure report from Docker container

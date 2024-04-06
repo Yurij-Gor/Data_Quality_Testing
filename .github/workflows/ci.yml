@@ -35,7 +35,7 @@ jobs:
         BIGQUERY_DATASET_ID: ${{ secrets.BIGQUERY_DATASET_ID }}
       run: |
         echo $GOOGLE_APPLICATION_CREDENTIALS_JSON > /tmp/keys/GOOGLE_APPLICATION_CREDENTIALS.json
-        docker run --name data_quality_tests -e GOOGLE_APPLICATION_CREDENTIALS=/tmp/keys/GOOGLE_APPLICATION_CREDENTIALS.json -e GCS_BUCKET_NAME -e GCP_PROJECT_ID -e BIGQUERY_DATASET_ID pytest_runner
+        docker run --name data_quality_tests -v /tmp/keys:/keys -e GOOGLE_APPLICATION_CREDENTIALS=/keys/GOOGLE_APPLICATION_CREDENTIALS.json -e GCS_BUCKET_NAME -e GCP_PROJECT_ID -e BIGQUERY_DATASET_ID pytest_runner
 
     - name: Authenticate to Google Cloud
       uses: google-github-actions/auth@v0.4.0

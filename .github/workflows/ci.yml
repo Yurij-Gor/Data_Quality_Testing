@@ -64,6 +64,12 @@ jobs:
       if: always()
       run: docker cp data_quality_tests:/tests_project/test_results ./test_results
 
+    - name: Install Java
+      if: always()
+      run: |
+        sudo apt update
+        sudo apt install -y default-jdk
+
     - name: Generate Allure Report
       if: always()
       run: |
@@ -80,5 +86,5 @@ jobs:
       if: always()
       uses: peaceiris/actions-gh-pages@v3
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        github_token: ${{ secrets.MY_GITHUB_TOKEN }}
         publish_dir: ./test_results/allure-report

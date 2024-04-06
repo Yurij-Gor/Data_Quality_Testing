@@ -1,0 +1,50 @@
+[
+    {
+        "geo": "GU",
+        "segment": "01_US",
+        "platform": "as",
+        "ua_team": "Network"
+    },
+    {
+        "geo": "AR",
+        "segment": "06_Low_1",
+        "platform": "as",
+        "ua_team": "Network"
+    },
+    {
+        "geo": "LT",
+        "segment": "06_Low_1",
+        "platform": "as",
+        "ua_team": "Network"
+    },
+    {
+        "geo": "CL",
+        "segment": "06_Low_1",
+        "platform": "as",
+        "ua_team": "Network"
+    },
+    {
+        "geo": "BG",
+        "segment": "06_Low_1",
+        "platform": "as",
+        "ua_team": "Network"
+    },
+    {
+        "geo": "SA",
+        "segment": "06_Low_1",
+        "platform": "as",
+        "ua_team": "Network"
+    },
+    {
+        "geo": "BY",
+        "segment": "06_Low_1",
+        "platform": "as",
+        "ua_team": "Network"
+    },
+    {
+        "geo": "GU",
+        "segment": "06_Low_1",
+        "platform": "as",
+        "ua_team": "Network"
+    }
+]

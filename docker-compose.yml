@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  data_quality_test_runner:
+    build: .
+    image: pytest_runner
+    container_name: data_quality_tests
+    environment:
+      - RUN_IN_DOCKER=true
+    volumes:
+      - .:/tests_project/
+      - ./test_results:/tests_project/test_results
+      - D:/Python/Data analysis/Google Cloud/key_data_quality/:/keys/
+    command: ["python", "-m", "pytest", "-vv", "-s", "--alluredir=test_results/", "tests/"]

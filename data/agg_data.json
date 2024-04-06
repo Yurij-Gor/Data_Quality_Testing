@@ -1,0 +1,86 @@
+[
+    {
+        "app_id": 31985,
+        "install_date": "2020-03-26",
+        "device_model": "iphone 7",
+        "installs": 20
+    },
+    {
+        "app_id": 31985,
+        "install_date": "2020-01-27",
+        "device_model": "iphone 11",
+        "installs": 56
+    },
+    {
+        "app_id": 32116,
+        "install_date": "2020-03-01",
+        "device_model": "redmi 13",
+        "installs": 65
+    },
+    {
+        "app_id": 32116,
+        "install_date": "2020-06-26",
+        "device_model": null,
+        "installs": 550
+    },
+    {
+        "app_id": 31885,
+        "install_date": "2020-07-26",
+        "device_model": "iphone 7",
+        "installs": 20
+    },
+    {
+        "app_id": 31885,
+        "install_date": "2020-10-26",
+        "device_model": null,
+        "installs": 870
+    },
+    {
+        "app_id": 32116,
+        "install_date": "2020-02-26",
+        "device_model": "redmi 5",
+        "installs": 250
+    },
+    {
+        "app_id": 32116,
+        "install_date": "2020-01-26",
+        "device_model": "iphone 7",
+        "installs": 970
+    },
+    {
+        "app_id": 31985,
+        "install_date": "2020-02-26",
+        "device_model": "iphone 7",
+        "installs": 70
+    },
+    {
+        "app_id": 31985,
+        "install_date": "2020-04-26",
+        "device_model": "iphone 7",
+        "installs": 320
+    },
+    {
+        "app_id": 32110,
+        "install_date": "2020-06-26",
+        "device_model": "iphone 7",
+        "installs": 80
+    },
+    {
+        "app_id": 31985,
+        "install_date": "2020-07-26",
+        "device_model": "iphone 7",
+        "installs": 2550
+    },
+    {
+        "app_id": 31885,
+        "install_date": "2020-04-26",
+        "device_model": "iphone 13",
+        "installs": 430
+    },
+    {
+        "app_id": 31985,
+        "install_date": "2020-12-31",
+        "device_model": "iphone 7",
+        "installs": 20
+    }
+]

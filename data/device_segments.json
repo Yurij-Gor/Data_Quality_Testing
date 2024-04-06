@@ -1,0 +1,65 @@
+[
+    {
+        "device_model": "iphone 7",
+        "segment": "01_Top",
+        "app_short": "fd_as",
+        "platform": "as",
+        "ua_team": "Network"
+    },
+    {
+        "device_model": "iphone 11",
+        "segment": "05_Other",
+        "app_short": "fd_as",
+        "platform": "as",
+        "ua_team": "Network"
+    },
+    {
+        "device_model": "ipad 5",
+        "segment": "01_Top",
+        "app_short": "fd_as",
+        "platform": "as",
+        "ua_team": "Network"
+    },
+    {
+        "device_model": "iphone 13",
+        "segment": "03_Mid2",
+        "app_short": "fd_as",
+        "platform": "as",
+        "ua_team": "Network"
+    },
+    {
+        "device_model": "redmi 7",
+        "segment": "01_Top",
+        "app_short": "fd_gp",
+        "platform": "gp",
+        "ua_team": "Network"
+    },
+    {
+        "device_model": "redmi 11",
+        "segment": "04_Mid2",
+        "app_short": "fd_gp",
+        "platform": "gp",
+        "ua_team": "Network"
+    },
+    {
+        "device_model": "redmi 5",
+        "segment": "05_Low",
+        "app_short": "fd_gp",
+        "platform": "gp",
+        "ua_team": "Network"
+    },
+    {
+        "device_model": "redmi 13",
+        "segment": "01_Top",
+        "app_short": "fd_gp",
+        "platform": "gp",
+        "ua_team": "Network"
+    },
+    {
+        "device_model": "redmi 13",
+        "segment": "01_Top",
+        "app_short": "fd_gp",
+        "platform": "gp",
+        "ua_team": "Network"
+    }
+]

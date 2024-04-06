@@ -54,7 +54,7 @@ jobs:
         java-version: '17'
 
     - name: Set JAVA_HOME
-      run: echo "JAVA_HOME=$(echo ${JAVA_HOME})" >> $GITHUB_ENV
+      run: echo "JAVA_HOME=${JAVA_HOME}" >> $GITHUB_ENV
 
     - name: Run Tests in Docker
       env:

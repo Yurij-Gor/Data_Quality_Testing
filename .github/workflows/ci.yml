@@ -60,10 +60,6 @@ jobs:
           -e BIGQUERY_DATASET_ID \
           pytest_runner
 
-    - name: Copy Allure report from Docker container
-      if: always()
-      run: docker cp data_quality_tests:/tests_project/test_results ./test_results
-
     - name: Install Java
       run: |
         sudo apt update
@@ -71,6 +67,10 @@ jobs:
 
     - name: Set JAVA_HOME
       run: echo "JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64" >> $GITHUB_ENV
+
+    - name: Copy Allure report from Docker container
+      if: always()
+      run: docker cp data_quality_tests:/tests_project/test_results ./test_results
 
     - name: Generate Allure Report
       if: always()

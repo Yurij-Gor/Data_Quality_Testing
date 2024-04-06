@@ -57,9 +57,9 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Install Allure CLI
+    - name: Install Allure
       if: always()
-      run: sudo apt-get install allure
+      run: npm install -g allure-commandline
 
     - name: Generate Allure Report
       if: always()

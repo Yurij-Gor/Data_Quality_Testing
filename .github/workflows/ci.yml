@@ -54,7 +54,7 @@ jobs:
         java-version: '17'
 
     - name: Set JAVA_HOME
-      run: echo "JAVA_HOME=${{ steps.setup-java.outputs.java-home }}" >> $GITHUB_ENV
+      run: echo "JAVA_HOME=$(echo ${JAVA_HOME})" >> $GITHUB_ENV
 
     - name: Run Tests in Docker
       env:
@@ -69,7 +69,7 @@ jobs:
           -e GCS_BUCKET_NAME \
           -e GCP_PROJECT_ID \
           -e BIGQUERY_DATASET_ID \
-          -e JAVA_HOME="${{ steps.setup-java.outputs.java-home }}" \
+          -e JAVA_HOME=${JAVA_HOME} \
           pytest_runner
 
     - name: Copy Allure report from Docker container

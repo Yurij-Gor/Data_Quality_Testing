@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Set up Python 3.12
+    - name: Set up Python
       uses: actions/setup-python@v2
       with:
         python-version: 3.12
@@ -32,17 +32,6 @@ jobs:
     - name: Save GCP_SA_KEY to file
       run: echo '${{ secrets.GCP_SA_KEY }}' > /tmp/keys/GOOGLE_APPLICATION_CREDENTIALS.json
 
-    - name: Check if GOOGLE_APPLICATION_CREDENTIALS.json is not empty and valid JSON
-      run: |
-        if [ ! -s /tmp/keys/GOOGLE_APPLICATION_CREDENTIALS.json ]; then
-          echo "GOOGLE_APPLICATION_CREDENTIALS.json is empty"
-          exit 1
-        fi
-        if ! jq empty /tmp/keys/GOOGLE_APPLICATION_CREDENTIALS.json; then
-          echo "GOOGLE_APPLICATION_CREDENTIALS.json is not valid JSON"
-          exit 1
-        fi
-
     - name: Run Tests in Docker
       run: |
         docker run --name data_quality_tests \
@@ -54,33 +43,16 @@ jobs:
           pytest_runner
 
     - name: Create Allure results directory
-      if: always()
       run: mkdir -p test_results && sudo chmod -R 777 test_results
 
     - name: Copy Allure report from Docker container
-      if: always()
       run: docker cp data_quality_tests:/tests_project/test_results ./test_results
 
-    - name: Set up JDK 17
-      if: always()
-      uses: actions/setup-java@v2
-      with:
-        distribution: 'temurin'
-        java-version: '17'
-
     - name: Generate Allure Report
-      if: always()
-      run: allure generate ./test_results -o ./test_results/allure-report --clean
-
-    - name: Archive Allure report artifacts
-      if: always()
-      uses: actions/upload-artifact@v2
-      with:
-        name: allure-report
-        path: test_results/allure-report
+      run: |
+        docker run --rm -v $(pwd)/test_results:/test_results pytest_runner allure generate /test_results -o /test_results/allure-report --clean
 
     - name: Deploy to GitHub Pages
-      if: always()
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.MY_GITHUB_TOKEN }}

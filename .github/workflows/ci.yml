@@ -41,17 +41,9 @@ jobs:
         if ! jq empty /tmp/keys/GOOGLE_APPLICATION_CREDENTIALS.json; then
           echo "GOOGLE_APPLICATION_CREDENTIALS.json is not valid JSON"
           exit 1
-        else
-          echo "GOOGLE_APPLICATION_CREDENTIALS.json is valid JSON"
         fi
 
-    - name: Checkout gh-pages for report history
-      uses: actions/[email protected]
-      with:
-        ref: gh-pages
-        path: gh-pages
-
-    - name: Build and run tests
+    - name: Run Tests in Docker
       run: |
         docker run --name data_quality_tests \
           -v /tmp/keys:/keys \
@@ -61,13 +53,35 @@ jobs:
           -e BIGQUERY_DATASET_ID=${{ secrets.BIGQUERY_DATASET_ID }} \
           pytest_runner
 
+    - name: Create Allure results directory
+      if: always()
+      run: mkdir -p test_results && sudo chmod -R 777 test_results
+
     - name: Copy Allure report from Docker container
       if: always()
       run: docker cp data_quality_tests:/tests_project/test_results ./test_results
 
-    - name: Generate and Publish Allure Report
-      uses: simple-elf/allure-report-action@master
+    - name: Set up JDK 17
       if: always()
+      uses: actions/setup-java@v2
       with:
-        results_directory: ./test_results
-        gh_pages_source: ./gh-pages
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Generate Allure Report
+      if: always()
+      run: allure generate ./test_results -o ./test_results/allure-report --clean
+
+    - name: Archive Allure report artifacts
+      if: always()
+      uses: actions/upload-artifact@v2
+      with:
+        name: allure-report
+        path: test_results/allure-report
+
+    - name: Deploy to GitHub Pages
+      if: always()
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.MY_GITHUB_TOKEN }}
+        publish_dir: ./test_results/allure-report

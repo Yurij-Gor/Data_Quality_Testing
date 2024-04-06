@@ -58,6 +58,7 @@ jobs:
         java-version: '17'
 
     - name: Install Allure CLI
+      if: always()
       run: sudo apt-get install allure
 
     - name: Generate Allure Report

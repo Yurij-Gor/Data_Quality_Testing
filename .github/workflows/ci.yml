@@ -57,10 +57,12 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
+    - name: Install Allure CLI
+      run: sudo apt-get install allure
+
     - name: Generate Allure Report
       if: always()
-      run: |
-        docker run --rm -v $(pwd)/test_results:/test_results pytest_runner allure generate /test_results -o /test_results/allure-report --clean
+      run: allure generate ./test_results -o ./test_results/allure-report --clean
 
     - name: Deploy to GitHub Pages
       if: always()

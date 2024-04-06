@@ -24,6 +24,9 @@ jobs:
       run: |
         docker build -t pytest_runner .
 
+    - name: Create GCP Keys Directory
+      run: mkdir -p /tmp/keys
+
     - name: Run Tests in Docker
       env:
         GOOGLE_APPLICATION_CREDENTIALS_JSON: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}

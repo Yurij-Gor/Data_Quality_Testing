@@ -1,1 +1,61 @@
 
+name: CI Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    services:
+      docker:
+        image: docker:19.03.12
+        options: --privileged
+    env:
+      GOOGLE_APPLICATION_CREDENTIALS: /tmp/keys/GOOGLE_APPLICATION_CREDENTIALS.json
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.12
+
+    - name: Build Docker Image
+      run: |
+        docker build -t pytest_runner .
+
+    - name: Run Tests in Docker
+      run: |
+        docker run --name data_quality_tests --env-file ./docker.env pytest_runner
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v0.4.0
+      with:
+        credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+    - name: Copy Allure report from Docker container
+      run: |
+        docker cp data_quality_tests:/tests_project/test_results ./test_results
+
+    - name: Generate Allure Report
+      run: |
+        docker run --rm -v $(pwd)/test_results:/test_results pytest_runner allure generate /test_results -o /test_results/allure-report --clean
+
+    - name: Archive Allure report artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: allure-report
+        path: test_results/allure-report
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./test_results/allure-report

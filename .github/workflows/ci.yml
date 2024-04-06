@@ -26,9 +26,6 @@ jobs:
     - name: Create GCP Keys Directory
       run: mkdir -p /tmp/keys
 
-    - name: Install jq
-      run: sudo apt update && sudo apt install -y jq
-
     - name: Save GCP_SA_KEY to file
       run: echo '${{ secrets.GCP_SA_KEY }}' > /tmp/keys/GOOGLE_APPLICATION_CREDENTIALS.json
 

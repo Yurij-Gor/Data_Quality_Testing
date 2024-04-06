@@ -45,7 +45,13 @@ jobs:
           echo "GOOGLE_APPLICATION_CREDENTIALS.json is valid JSON"
         fi
 
-    - name: Run Tests in Docker
+    - name: Checkout gh-pages for report history
+      uses: actions/[email protected]
+      with:
+        ref: gh-pages
+        path: gh-pages
+
+    - name: Build and run tests
       run: |
         docker run --name data_quality_tests \
           -v /tmp/keys:/keys \
@@ -59,30 +65,9 @@ jobs:
       if: always()
       run: docker cp data_quality_tests:/tests_project/test_results ./test_results
 
-    - name: Set up JDK 17
+    - name: Generate and Publish Allure Report
+      uses: simple-elf/allure-report-action@master
       if: always()
-      uses: actions/setup-java@v2
       with:
-        distribution: 'temurin'
-        java-version: '17'
-
-    - name: Generate Allure Report
-      if: always()
-      uses: simple-elf/allure-report-action@v1.0
-      with:
-        allure_results: ./test_results
-        allure_report: ./test_results/allure-report
-
-    - name: Archive Allure report artifacts
-      if: always()
-      uses: actions/upload-artifact@v2
-      with:
-        name: allure-report
-        path: test_results/allure-report
-
-    - name: Deploy to GitHub Pages
-      if: always()
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.MY_GITHUB_TOKEN }}
-        publish_dir: ./test_results/allure-report
+        results_directory: ./test_results
+        gh_pages_source: ./gh-pages

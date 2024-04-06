@@ -30,8 +30,7 @@ jobs:
       run: sudo apt update && sudo apt install -y jq
 
     - name: Save GCP_SA_KEY to file
-      run: |
-        echo '${{ secrets.GCP_SA_KEY }}' > /tmp/keys/GOOGLE_APPLICATION_CREDENTIALS.json
+      run: echo '${{ secrets.GCP_SA_KEY }}' > /tmp/keys/GOOGLE_APPLICATION_CREDENTIALS.json
 
     - name: Check if GOOGLE_APPLICATION_CREDENTIALS.json is not empty and valid JSON
       run: |
@@ -45,6 +44,12 @@ jobs:
         else
           echo "GOOGLE_APPLICATION_CREDENTIALS.json is valid JSON"
         fi
+
+    - name: Set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+        distribution: 'adopt'
 
     - name: Run Tests in Docker
       env:
@@ -60,31 +65,20 @@ jobs:
           -e BIGQUERY_DATASET_ID \
           pytest_runner
 
-    - name: Set up JDK 11
-      if: always()
-      uses: actions/setup-java@v2
-      with:
-        java-version: '11'
-        distribution: 'adopt'
-
     - name: Copy Allure report from Docker container
-      if: always()
       run: docker cp data_quality_tests:/tests_project/test_results ./test_results
 
     - name: Generate Allure Report
-      if: always()
       run: |
         docker run --rm -v $(pwd)/test_results:/test_results pytest_runner allure generate /test_results -o /test_results/allure-report --clean
 
     - name: Archive Allure report artifacts
-      if: always()
       uses: actions/upload-artifact@v2
       with:
         name: allure-report
         path: test_results/allure-report
 
     - name: Deploy to GitHub Pages
-      if: always()
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.MY_GITHUB_TOKEN }}

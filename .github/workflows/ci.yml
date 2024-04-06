@@ -65,11 +65,12 @@ jobs:
       run: docker cp data_quality_tests:/tests_project/test_results ./test_results
 
     - name: Install Java
-      if: always()
       run: |
         sudo apt update
         sudo apt install -y default-jdk
-        echo "JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64" >> $GITHUB_ENV
+
+    - name: Set JAVA_HOME
+      run: echo "JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64" >> $GITHUB_ENV
 
     - name: Generate Allure Report
       if: always()

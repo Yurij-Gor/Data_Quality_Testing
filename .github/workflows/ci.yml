@@ -41,38 +41,34 @@ jobs:
         if ! jq empty /tmp/keys/GOOGLE_APPLICATION_CREDENTIALS.json; then
           echo "GOOGLE_APPLICATION_CREDENTIALS.json is not valid JSON"
           exit 1
+        else
+          echo "GOOGLE_APPLICATION_CREDENTIALS.json is valid JSON"
         fi
 
     - name: Run Tests in Docker
-      env:
-        GCS_BUCKET_NAME: ${{ secrets.GCS_BUCKET_NAME }}
-        GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-        BIGQUERY_DATASET_ID: ${{ secrets.BIGQUERY_DATASET_ID }}
       run: |
         docker run --name data_quality_tests \
           -v /tmp/keys:/keys \
           -e GOOGLE_APPLICATION_CREDENTIALS=/keys/GOOGLE_APPLICATION_CREDENTIALS.json \
-          -e GCS_BUCKET_NAME \
-          -e GCP_PROJECT_ID \
-          -e BIGQUERY_DATASET_ID \
+          -e GCS_BUCKET_NAME=${{ secrets.GCS_BUCKET_NAME }} \
+          -e GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }} \
+          -e BIGQUERY_DATASET_ID=${{ secrets.BIGQUERY_DATASET_ID }} \
           pytest_runner
 
     - name: Copy Allure report from Docker container
       if: always()
       run: docker cp data_quality_tests:/tests_project/test_results ./test_results
 
-    - name: Set up JDK 17 for Allure Report
+    - name: Set up JDK 17
       if: always()
       uses: actions/setup-java@v2
       with:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Install Allure
+    - name: Install Allure commandline
       if: always()
-      run: |
-        sudo apt-get update
-        sudo apt-get install allure -y
+      run: sudo apt-get install allure -y
 
     - name: Generate Allure Report
       if: always()

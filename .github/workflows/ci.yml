@@ -1,4 +1,3 @@
-
 name: CI Workflow
 
 on:
@@ -12,12 +11,6 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    services:
-      docker:
-        image: docker:19.03.12
-        options: --privileged
-    env:
-      GOOGLE_APPLICATION_CREDENTIALS: /tmp/keys/GOOGLE_APPLICATION_CREDENTIALS.json
 
     steps:
     - uses: actions/checkout@v2
@@ -32,13 +25,19 @@ jobs:
         docker build -t pytest_runner .
 
     - name: Run Tests in Docker
+      env:
+        GOOGLE_APPLICATION_CREDENTIALS_JSON: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}
+        GCS_BUCKET_NAME: ${{ secrets.GCS_BUCKET_NAME }}
+        GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+        BIGQUERY_DATASET_ID: ${{ secrets.BIGQUERY_DATASET_ID }}
       run: |
-        docker run --name data_quality_tests --env-file ./docker.env pytest_runner
+        echo $GOOGLE_APPLICATION_CREDENTIALS_JSON > /tmp/keys/GOOGLE_APPLICATION_CREDENTIALS.json
+        docker run --name data_quality_tests -e GOOGLE_APPLICATION_CREDENTIALS=/tmp/keys/GOOGLE_APPLICATION_CREDENTIALS.json -e GCS_BUCKET_NAME -e GCP_PROJECT_ID -e BIGQUERY_DATASET_ID pytest_runner
 
     - name: Authenticate to Google Cloud
       uses: google-github-actions/auth@v0.4.0
       with:
-        credentials_json: '${{ secrets.GCP_SA_KEY }}'
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
 
     - name: Copy Allure report from Docker container
       run: |

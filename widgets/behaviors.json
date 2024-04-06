@@ -1,1 +1,1 @@
-{"total":0,"items":[]}
+{"total":2,"items":[{"uid":"c0532ed90c2100f4c52e383ee9a1fcb9","name":"View_Creation","statistic":{"failed":4,"broken":0,"skipped":0,"passed":7,"unknown":0,"total":11}},{"uid":"a7329fce998fcb46290f6daf8f65fc2b","name":"Data_Tables_Creation","statistic":{"failed":4,"broken":0,"skipped":0,"passed":5,"unknown":0,"total":9}}]}

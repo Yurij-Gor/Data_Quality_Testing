@@ -1,0 +1,13 @@
+
+        -- Выбираем уникальные названия приложений и платформы из таблицы app_names
+        SELECT DISTINCT an.app_name, an.platform
+        FROM `data-quality-project-1.dq_data_set.app_names` an
+        -- Условие для отбора записей, для которых не существует соответствующих записей в таблице device_segments
+        WHERE NOT EXISTS (
+          -- Подзапрос, который проверяет наличие записи в device_segments
+          SELECT 1
+          FROM `data-quality-project-1.dq_data_set.device_segments` ds
+          -- Условие соответствия между названием приложения и коротким названием приложения в таблице device_segments
+          WHERE an.app_name = ds.app_short AND an.platform = ds.platform
+        )
+    

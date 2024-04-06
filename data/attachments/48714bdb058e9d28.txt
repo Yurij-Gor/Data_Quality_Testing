@@ -1,0 +1,15 @@
+
+    -- Выборка моделей устройств, помеченных как 'non_target_device', и проверка на их наличие в таблице device_segments.
+    -- В случае если модель присутствует в device_segments, это указывает на ошибочное использование метки 'non_target_device'.
+    SELECT 
+      v.device_model, 
+      STRING_AGG(d.segment) AS expected_segments  -- Агрегируем все сегменты, связанные с моделью устройства, в строку.
+    FROM (
+      SELECT DISTINCT device_model  -- Выборка уникальных моделей устройств с меткой 'non_target_device' из v_agg_data.
+      FROM `data-quality-project-1.dq_data_set.v_agg_data`
+      WHERE device_segment = 'non_target_device'
+    ) v
+    LEFT JOIN `data-quality-project-1.dq_data_set.device_segments` d ON v.device_model = d.device_model  -- Соединяем с таблицей device_segments для проверки наличия модели.
+    GROUP BY v.device_model
+    HAVING COUNT(d.segment) > 0  -- Отбираем только те случаи, где модель имеет хотя бы один сегмент в device_segments.
+    

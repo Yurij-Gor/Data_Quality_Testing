@@ -1,0 +1,6 @@
+
+        -- Поиск записей в agg_data с неположительным количеством установок (installs <= 0)
+        SELECT COUNT(*) as cnt
+        FROM `data-quality-project-1.dq_data_set.agg_data`
+        WHERE installs <= 0
+    

@@ -1,0 +1,11 @@
+
+        SELECT app_id, COUNT(DISTINCT app_name) as unique_app_names, COUNT(DISTINCT platform) as unique_platforms
+        FROM `data-quality-project-1.dq_data_set.app_names`
+        GROUP BY app_id
+        -- Группируем записи по app_id для агрегации данных. Это позволяет нам подсчитать количество
+        -- уникальных app_name и platform, ассоциированных с каждым app_id.
+        -- Условие HAVING применяется после группировки для фильтрации групп, у которых
+        -- количество уникальных app_name или platform превышает 1. Это указывает на наличие дубликатов:
+        -- ситуаций, когда одному идентификатору приложения соответствуют несколько названий или платформ.
+        HAVING unique_app_names > 1 OR unique_platforms > 1
+    

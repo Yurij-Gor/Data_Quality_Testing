@@ -1,0 +1,8 @@
+
+        -- Подсчет количества записей, где количество установок меньше или равно нулю
+        SELECT COUNT(*) as cnt
+        -- Обращение к таблице v_agg_data
+        FROM `data-quality-project-1.dq_data_set.v_agg_data`
+        -- Условие фильтрации записей по количеству установок
+        WHERE installs <= 0
+    

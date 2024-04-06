@@ -1,0 +1,13 @@
+
+        -- Выбор уникальных моделей устройств из таблицы agg_data после приведения их к верхнему регистру
+        SELECT DISTINCT UPPER(agg.device_model) AS device_model_upper
+        -- Указание таблицы agg_data, из которой будут выбираться данные, с использованием псевдонима 'agg'
+        FROM `data-quality-project-1.dq_data_set.agg_data` agg
+        -- Отбор моделей устройств, которых нет в таблице device_segments
+        WHERE UPPER(agg.device_model) NOT IN (
+          -- Подзапрос для выбора уникальных моделей устройств из таблицы device_segments после приведения их к верхнему регистру
+          SELECT DISTINCT UPPER(ds.device_model)
+          -- Указание таблицы device_segments, из которой будут выбираться данные для подзапроса, с использованием псевдонима 'ds'
+          FROM `data-quality-project-1.dq_data_set.device_segments` ds
+        )
+    

@@ -1,0 +1,13 @@
+
+        -- Выборка уникальных сегментов устройства из представления v_agg_data
+        SELECT DISTINCT v.device_segment
+        FROM `data-quality-project-1.dq_data_set.v_agg_data` v
+        -- Фильтрация сегментов, отличных от 'non_target_device', и проверка их наличия в device_segments
+        WHERE v.device_segment <> 'non_target_device' AND NOT EXISTS (
+            -- Подзапрос проверяет наличие сегмента из v_agg_data в таблице device_segments.
+            -- 'SELECT 1' используется для проверки существования записи: возвращает 1, если запись найдена.
+            SELECT 1
+            FROM `data-quality-project-1.dq_data_set.device_segments` ds
+            WHERE v.device_segment = ds.segment
+        )
+    

@@ -1,0 +1,9 @@
+
+        -- Поиск дубликатов по сочетанию device_model и segment
+        -- Это помогает обеспечить, что каждая модель устройства и сегмент уникально идентифицированы в таблице
+        SELECT device_model, segment, COUNT(*) as cnt
+        FROM `data-quality-project-1.dq_data_set.device_segments`
+        GROUP BY device_model, segment
+        -- Фильтрация групп, в которых количество записей больше одной, что указывает на наличие дубликатов
+        HAVING cnt > 1
+    

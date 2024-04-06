@@ -1,0 +1,7 @@
+
+        -- Проверка согласованности типов данных столбца installs в представлении v_agg_data
+        -- Выбираем записи, где приведение installs к INT64 возвращает NULL, указывая на некорректные данные
+        SELECT install_date, installs
+        FROM `data-quality-project-1.dq_data_set.v_agg_data`
+        WHERE SAFE_CAST(installs AS INT64) IS NULL
+    

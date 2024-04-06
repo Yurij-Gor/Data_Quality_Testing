@@ -1,0 +1,16 @@
+
+    SELECT 
+      v.device_model, 
+      v.device_segment,
+      CASE 
+        WHEN d.device_model IS NULL THEN 'Missing'  -- Если нет соответствия в таблице device_segments, ставим статус 'Missing'
+        ELSE 'Present'  -- Если есть соответствие, ставим статус 'Present'
+      END AS segment_status
+    FROM (
+      SELECT DISTINCT device_model, device_segment
+      FROM `data-quality-project-1.dq_data_set.v_agg_data`  -- Выбираем уникальные пары модель устройства и сегмент из v_agg_data
+      WHERE device_segment != 'non_target_device'  -- Исключаем сегмент 'non_target_device', так как он не требует проверки
+    ) AS v
+    LEFT JOIN `data-quality-project-1.dq_data_set.device_segments` AS d  -- Присоединяем таблицу device_segments
+    ON v.device_model = d.device_model AND v.device_segment = d.segment  -- Условие присоединения: совпадение модели и сегмента
+    

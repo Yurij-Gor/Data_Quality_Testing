@@ -1,0 +1,10 @@
+
+        -- Выполняется LEFT JOIN между таблицей agg_data и app_names по столбцу app_id.
+        -- Это позволяет нам проверить каждый app_id из agg_data на наличие соответствующей записи в app_names.
+        -- Если соответствующая запись в app_names не найдена (т.е., результат JOIN'a для этой строки будет NULL),
+        -- такие app_id считаются "отсутствующими" в app_names.
+        SELECT ad.app_id
+        FROM `data-quality-project-1.dq_data_set.agg_data` ad
+        LEFT JOIN `data-quality-project-1.dq_data_set.app_names` an ON ad.app_id = an.app_id
+        WHERE an.app_id IS NULL  -- Отбираются только те app_id, для которых не нашлось соответствия в app_names.
+    

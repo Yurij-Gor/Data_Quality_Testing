@@ -147,6 +147,6 @@ Data_Quality_Testing/
 └── README.md              # This README file.
 ```
 
-## Results
-View the Allure Report:  
+## Test Results
+View the Allure Test Report:  
 [Allure Report](https://yurij-gor.github.io/Data_Quality_Testing/)

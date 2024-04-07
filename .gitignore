@@ -29,7 +29,7 @@ db.sqlite3
 temp_code/
 
 # Ignore everything in this directory
-# test_results/*
+test_results/*
 
 # Except this file
-# !test_results/.gitkeep
+!test_results/.gitkeep

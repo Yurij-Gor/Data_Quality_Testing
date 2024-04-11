@@ -1,0 +1,7 @@
+
+    -- Выборка записей с датами установки за пределами ожидаемого диапазона
+    -- Условие проверяет, что дата установки не раньше '2020-01-01' и не позднее текущей даты
+    SELECT COUNT(*) as cnt
+    FROM `data-quality-project-1.dq_data_set.v_agg_data`
+    WHERE install_date < '2020-01-01' OR install_date > CURRENT_DATE()
+    

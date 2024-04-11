@@ -13,15 +13,14 @@ def test_date_range(setup):
     bq_client, env = setup  # Используем фикстуру setup для получения клиента BigQuery и конфигурации
     v_agg_data = env.get_full_table_id('v_agg_data')  # Получаем полный ID таблицы v_agg_data
     start_date = "2020-01-01"
-    end_date = datetime.date.today().strftime("%Y-%m-%d")  # Текущая дата в формате YYYY-MM-DD
 
     # Формируем запрос для проверки диапазона дат
     query = f"""
     -- Выборка записей с датами установки за пределами ожидаемого диапазона
-    -- Условие проверяет, что дата установки не раньше '{start_date}' и не позднее '{end_date}'
+    -- Условие проверяет, что дата установки не раньше '{start_date}' и не позднее текущей даты
     SELECT COUNT(*) as cnt
     FROM `{v_agg_data}`
-    WHERE install_date < '{start_date}' OR install_date > '{end_date}'
+    WHERE install_date < '{start_date}' OR install_date > CURRENT_DATE()
     """
 
     # Используем вспомогательную функцию для выполнения запроса и логирования в Allure
@@ -30,8 +29,8 @@ def test_date_range(setup):
     count_out_of_range = next(results).cnt  # Получаем количество записей за пределами диапазона
 
     # Проверка, что нет записей с датами установки вне заданного диапазона
-    with allure.step(f"Проверка, что нет записей с датами установки вне диапазона {start_date} - {end_date}"):
-        assert count_out_of_range == 0, f"Найдены установки с датами вне диапазона {start_date} - {end_date}"
+    with allure.step(f"Проверка, что нет записей с датами установки вне диапазона после {start_date} и до текущей даты"):
+        assert count_out_of_range == 0, f"Найдены установки с датами вне диапазона после {start_date} и до текущей даты"
 
 
 @allure.story('View_Creation')
@@ -133,11 +132,11 @@ def test_undefined_device_model_installs(setup):
 
     # Сформируем запрос для выборки имен приложений и подсчета установок, где модель устройства не указана или является пустой строкой.
     query = f"""
-    -- Выборка имен приложений и подсчет установок, где модель устройства не указана или пустая строка
-    SELECT app_name, COUNT(*) as total_installs
-    FROM `{v_agg_data}`
-    WHERE device_model IS NULL OR device_model = ''
-    GROUP BY app_name
+        -- Выборка имен приложений и подсчет установок, где модель устройства не указана или пустая строка
+        SELECT app_name, COUNT(*) as total_installs
+        FROM `{v_agg_data}`
+        WHERE device_model IS NULL OR device_model = ''
+        GROUP BY app_name
     """
 
     # Используем вспомогательную функцию для выполнения запроса и логирования его в Allure.

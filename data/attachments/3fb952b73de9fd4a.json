@@ -1,0 +1,74 @@
+[
+    {
+        "app_name": "fd_as",
+        "device_model": "iphone 7",
+        "install_date": "2020-03-26",
+        "installs": 20,
+        "device_segment": "non_target_device",
+        "cnt": 8
+    },
+    {
+        "app_name": "fd_as",
+        "device_model": "iphone 7",
+        "install_date": "2020-02-26",
+        "installs": 70,
+        "device_segment": "non_target_device",
+        "cnt": 8
+    },
+    {
+        "app_name": "fd_as",
+        "device_model": "iphone 7",
+        "install_date": "2020-04-26",
+        "installs": 320,
+        "device_segment": "non_target_device",
+        "cnt": 8
+    },
+    {
+        "app_name": "fd_as",
+        "device_model": "iphone 7",
+        "install_date": "2020-07-26",
+        "installs": 2550,
+        "device_segment": "non_target_device",
+        "cnt": 8
+    },
+    {
+        "app_name": "fd_as",
+        "device_model": "iphone 7",
+        "install_date": "2020-12-31",
+        "installs": 20,
+        "device_segment": "non_target_device",
+        "cnt": 8
+    },
+    {
+        "app_name": "gs_as",
+        "device_model": "iphone 7",
+        "install_date": "2020-06-26",
+        "installs": 80,
+        "device_segment": "non_target_device",
+        "cnt": 8
+    },
+    {
+        "app_name": "hs_as",
+        "device_model": "iphone 7",
+        "install_date": "2020-07-26",
+        "installs": 20,
+        "device_segment": "non_target_device",
+        "cnt": 8
+    },
+    {
+        "app_name": "hs_as",
+        "device_model": null,
+        "install_date": "2020-10-26",
+        "installs": 870,
+        "device_segment": "non_target_device",
+        "cnt": 8
+    },
+    {
+        "app_name": "hs_as",
+        "device_model": "iphone 13",
+        "install_date": "2020-04-26",
+        "installs": 430,
+        "device_segment": "non_target_device",
+        "cnt": 8
+    }
+]

@@ -1,66 +1,66 @@
 "Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
-"failed","Thu Apr 11 21:16:07 UTC 2024","Thu Apr 11 21:16:08 UTC 2024","1186","tests","test_data_in_tables","","","","test_app_names_platform_consistency","
+"passed","Sat Apr 13 08:26:51 UTC 2024","Sat Apr 13 08:26:53 UTC 2024","1490","tests","test_v_agg_data","","","","test_install_date_post_2020","Тестирование, что нет установок приложений до 1 января 2020 года."
+"passed","Sat Apr 13 08:27:04 UTC 2024","Sat Apr 13 08:27:05 UTC 2024","1190","tests","test_v_agg_data_additional","","","","test_v_agg_data_segment_existence","
+Проверяет, что каждый сегмент устройства из v_agg_data существует в device_segments или помечен как 'non_target_device'.
+"
+"failed","Sat Apr 13 08:26:45 UTC 2024","Sat Apr 13 08:26:46 UTC 2024","1012","tests","test_data_in_tables","","","","test_device_segments_uniqueness","
+Проверяет уникальность записей в таблице device_segments по сочетанию device_model и segment, гарантируя отсутствие дубликатов, что важно для целостности данных.
+"
+"failed","Sat Apr 13 08:26:44 UTC 2024","Sat Apr 13 08:26:45 UTC 2024","1010","tests","test_data_in_tables","","","","test_missing_device_data","
+Тест проверяет наличие соответствующих записей в таблице device_segments для каждой записи в таблице agg_data, 
+обеспечивая целостность данных о приложениях и устройствах.
+"
+"failed","Sat Apr 13 08:26:57 UTC 2024","Sat Apr 13 08:26:59 UTC 2024","1433","tests","test_v_agg_data","","","","test_non_target_device_usage","
+Проверка использования 'non_target_device' в представлении v_agg_data только в случаях отсутствия сегментов устройств в таблице device_segments.
+"
+"passed","Sat Apr 13 08:26:56 UTC 2024","Sat Apr 13 08:26:57 UTC 2024","1183","tests","test_v_agg_data","","","","test_v_agg_data_proper_segment_use","
+Проверка соответствия указанных сегментов устройств в представлении v_agg_data с сегментами, присутствующими в таблице device_segments.
+"
+"passed","Sat Apr 13 08:26:46 UTC 2024","Sat Apr 13 08:26:47 UTC 2024","1063","tests","test_data_in_tables","","","","test_agg_data_date_range","
+Проверяет, что в таблице agg_data нет записей с датой установки приложения ранее 1 января 2020 года, обеспечивая 
+актуальность и корректность данных.
+"
+"failed","Sat Apr 13 08:26:55 UTC 2024","Sat Apr 13 08:26:56 UTC 2024","763","tests","test_v_agg_data","","","","test_no_duplicates_in_view","
+Проверяет отсутствие дубликатов в представлении v_agg_data. Дубликаты могут указывать на проблемы в процессе сбора или обработки данных.
+"
+"passed","Sat Apr 13 08:26:49 UTC 2024","Sat Apr 13 08:26:51 UTC 2024","1123","tests","test_data_in_tables","","","","test_app_names_no_duplicate_ids","
+Проверяет таблицу app_names на отсутствие дубликатов app_id, где один и тот же app_id ассоциирован с разными app_name 
+или platform. 
+"
+"passed","Sat Apr 13 08:26:42 UTC 2024","Sat Apr 13 08:26:43 UTC 2024","1485","tests","test_data_in_tables","","","","test_device_models_match","
+Проверяет, что все модели устройств из таблицы agg_data имеют соответствующие записи в таблице device_segments.
+Использует функцию UPPER() для игнорирования регистра символов.
+"
+"passed","Sat Apr 13 08:26:47 UTC 2024","Sat Apr 13 08:26:48 UTC 2024","947","tests","test_data_in_tables","","","","test_agg_data_positive_installs","
+Проверяет, что в таблице agg_data все значения колонки installs положительные, тем самым гарантируя, что данные 
+по установкам приложений корректны и логически валидны.
+"
+"passed","Sat Apr 13 08:26:53 UTC 2024","Sat Apr 13 08:26:54 UTC 2024","1160","tests","test_v_agg_data","","","","test_positive_installs","Тестирование, что нет установок с нулевым или отрицательным количеством."
+"passed","Sat Apr 13 08:26:59 UTC 2024","Sat Apr 13 08:27:00 UTC 2024","1252","tests","test_v_agg_data_additional","","","","test_date_range","Тестирование того, что даты установки приложений находятся в ожидаемом диапазоне."
+"passed","Sat Apr 13 08:27:00 UTC 2024","Sat Apr 13 08:27:01 UTC 2024","1125","tests","test_v_agg_data_additional","","","","test_data_type_consistency","
+Тестирование согласованности типов данных в столбце installs представления v_agg_data. 
+Проверяется, что все значения являются числовыми и корректно приводятся к типу INT64.
+"
+"failed","Sat Apr 13 08:27:03 UTC 2024","Sat Apr 13 08:27:04 UTC 2024","1174","tests","test_v_agg_data_additional","","","","test_undefined_device_model_installs","
+Тест проверяет наличие установок приложений с неопределенной моделью устройства в представлении v_agg_data.
+"
+"failed","Sat Apr 13 08:26:54 UTC 2024","Sat Apr 13 08:26:55 UTC 2024","1173","tests","test_v_agg_data","","","","test_non_target_device_segments_absent","
+Тест проверяет отсутствие записей с нецелевыми сегментами устройств в представлении v_agg_data. 
+Нецелевые сегменты - это те, которые не указаны или явно обозначены как 'non_target_device'.
+"
+"failed","Sat Apr 13 08:26:43 UTC 2024","Sat Apr 13 08:26:44 UTC 2024","976","tests","test_data_in_tables","","","","test_app_names_match","
+Тест проверяет, что для всех app_name из таблицы app_names существует соответствие с app_short в таблице device_segments. Это гарантирует целостность данных между таблицами и правильность ссылок на приложения.
+"
+"failed","Sat Apr 13 08:26:51 UTC 2024","Sat Apr 13 08:26:51 UTC 2024","950","tests","test_data_in_tables","","","","test_app_names_platform_consistency","
 Проверяет согласованность между именами приложений и платформами в таблицах app_names и device_segments. 
 Это обеспечивает, что каждое приложение и соответствующая платформа корректно отражены в обеих таблицах, 
 поддерживая целостность данных.
 "
-"passed","Thu Apr 11 21:16:09 UTC 2024","Thu Apr 11 21:16:10 UTC 2024","1230","tests","test_v_agg_data","","","","test_positive_installs","Тестирование, что нет установок с нулевым или отрицательным количеством."
-"passed","Thu Apr 11 21:16:04 UTC 2024","Thu Apr 11 21:16:05 UTC 2024","1202","tests","test_data_in_tables","","","","test_app_names_consistency","
+"passed","Sat Apr 13 08:26:48 UTC 2024","Sat Apr 13 08:26:49 UTC 2024","1123","tests","test_data_in_tables","","","","test_app_names_consistency","
 Проверяет наличие соответствия каждого app_id из таблицы agg_data в таблице app_names, обеспечивая целостность ссылочных 
 данных между таблицами.
 "
-"passed","Thu Apr 11 21:16:17 UTC 2024","Thu Apr 11 21:16:19 UTC 2024","1956","tests","test_v_agg_data_additional","","","","test_date_range","Тестирование того, что даты установки приложений находятся в ожидаемом диапазоне."
-"passed","Thu Apr 11 21:16:21 UTC 2024","Thu Apr 11 21:16:23 UTC 2024","1993","tests","test_v_agg_data_additional","","","","test_unrealistic_high_installs","
+"passed","Sat Apr 13 08:27:01 UTC 2024","Sat Apr 13 08:27:03 UTC 2024","1434","tests","test_v_agg_data_additional","","","","test_unrealistic_high_installs","
 Тестирование на наличие неправдоподобно высоких значений установок в представлении v_agg_data. 
 Проверяется, что для всех приложений суммарное количество установок не превышает установленный порог.
 "
-"passed","Thu Apr 11 21:16:14 UTC 2024","Thu Apr 11 21:16:15 UTC 2024","1289","tests","test_v_agg_data","","","","test_v_agg_data_proper_segment_use","
-Проверка соответствия указанных сегментов устройств в представлении v_agg_data с сегментами, присутствующими в таблице device_segments.
-"
-"passed","Thu Apr 11 21:16:02 UTC 2024","Thu Apr 11 21:16:03 UTC 2024","1517","tests","test_data_in_tables","","","","test_agg_data_date_range","
-Проверяет, что в таблице agg_data нет записей с датой установки приложения ранее 1 января 2020 года, обеспечивая 
-актуальность и корректность данных.
-"
-"failed","Thu Apr 11 21:16:10 UTC 2024","Thu Apr 11 21:16:12 UTC 2024","1524","tests","test_v_agg_data","","","","test_non_target_device_segments_absent","
-Тест проверяет отсутствие записей с нецелевыми сегментами устройств в представлении v_agg_data. 
-Нецелевые сегменты - это те, которые не указаны или явно обозначены как 'non_target_device'.
-"
-"passed","Thu Apr 11 21:16:19 UTC 2024","Thu Apr 11 21:16:21 UTC 2024","1934","tests","test_v_agg_data_additional","","","","test_data_type_consistency","
-Тестирование согласованности типов данных в столбце installs представления v_agg_data. 
-Проверяется, что все значения являются числовыми и корректно приводятся к типу INT64.
-"
-"failed","Thu Apr 11 21:15:57 UTC 2024","Thu Apr 11 21:15:59 UTC 2024","1651","tests","test_data_in_tables","","","","test_app_names_match","
-Тест проверяет, что для всех app_name из таблицы app_names существует соответствие с app_short в таблице device_segments. Это гарантирует целостность данных между таблицами и правильность ссылок на приложения.
-"
-"failed","Thu Apr 11 21:16:15 UTC 2024","Thu Apr 11 21:16:17 UTC 2024","2023","tests","test_v_agg_data","","","","test_non_target_device_usage","
-Проверка использования 'non_target_device' в представлении v_agg_data только в случаях отсутствия сегментов устройств в таблице device_segments.
-"
-"passed","Thu Apr 11 21:16:24 UTC 2024","Thu Apr 11 21:16:26 UTC 2024","1599","tests","test_v_agg_data_additional","","","","test_v_agg_data_segment_existence","
-Проверяет, что каждый сегмент устройства из v_agg_data существует в device_segments или помечен как 'non_target_device'.
-"
-"passed","Thu Apr 11 21:16:05 UTC 2024","Thu Apr 11 21:16:07 UTC 2024","1192","tests","test_data_in_tables","","","","test_app_names_no_duplicate_ids","
-Проверяет таблицу app_names на отсутствие дубликатов app_id, где один и тот же app_id ассоциирован с разными app_name 
-или platform. 
-"
-"failed","Thu Apr 11 21:16:12 UTC 2024","Thu Apr 11 21:16:14 UTC 2024","1781","tests","test_v_agg_data","","","","test_no_duplicates_in_view","
-Проверяет отсутствие дубликатов в представлении v_agg_data. Дубликаты могут указывать на проблемы в процессе сбора или обработки данных.
-"
-"failed","Thu Apr 11 21:16:00 UTC 2024","Thu Apr 11 21:16:02 UTC 2024","1217","tests","test_data_in_tables","","","","test_device_segments_uniqueness","
-Проверяет уникальность записей в таблице device_segments по сочетанию device_model и segment, гарантируя отсутствие дубликатов, что важно для целостности данных.
-"
-"failed","Thu Apr 11 21:16:23 UTC 2024","Thu Apr 11 21:16:24 UTC 2024","1308","tests","test_v_agg_data_additional","","","","test_undefined_device_model_installs","
-Тест проверяет наличие установок приложений с неопределенной моделью устройства в представлении v_agg_data.
-"
-"passed","Thu Apr 11 21:16:03 UTC 2024","Thu Apr 11 21:16:04 UTC 2024","1110","tests","test_data_in_tables","","","","test_agg_data_positive_installs","
-Проверяет, что в таблице agg_data все значения колонки installs положительные, тем самым гарантируя, что данные 
-по установкам приложений корректны и логически валидны.
-"
-"passed","Thu Apr 11 21:15:55 UTC 2024","Thu Apr 11 21:15:57 UTC 2024","2263","tests","test_data_in_tables","","","","test_device_models_match","
-Проверяет, что все модели устройств из таблицы agg_data имеют соответствующие записи в таблице device_segments.
-Использует функцию UPPER() для игнорирования регистра символов.
-"
-"failed","Thu Apr 11 21:15:59 UTC 2024","Thu Apr 11 21:16:00 UTC 2024","1381","tests","test_data_in_tables","","","","test_missing_device_data","
-Тест проверяет наличие соответствующих записей в таблице device_segments для каждой записи в таблице agg_data, 
-обеспечивая целостность данных о приложениях и устройствах.
-"
-"passed","Thu Apr 11 21:16:08 UTC 2024","Thu Apr 11 21:16:09 UTC 2024","1353","tests","test_v_agg_data","","","","test_install_date_post_2020","Тестирование, что нет установок приложений до 1 января 2020 года."

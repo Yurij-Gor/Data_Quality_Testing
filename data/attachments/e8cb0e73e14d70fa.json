@@ -1,0 +1,38 @@
+[
+    {
+        "app_id": 32110,
+        "device_model": "iphone 7",
+        "app_name": "gs_as",
+        "platform": "as"
+    },
+    {
+        "app_id": 32116,
+        "device_model": null,
+        "app_name": "fd_gp",
+        "platform": "gp"
+    },
+    {
+        "app_id": 32116,
+        "device_model": "iphone 7",
+        "app_name": "fd_gp",
+        "platform": "gp"
+    },
+    {
+        "app_id": 31885,
+        "device_model": "iphone 7",
+        "app_name": "hs_as",
+        "platform": "as"
+    },
+    {
+        "app_id": 31885,
+        "device_model": null,
+        "app_name": "hs_as",
+        "platform": "as"
+    },
+    {
+        "app_id": 31885,
+        "device_model": "iphone 13",
+        "app_name": "hs_as",
+        "platform": "as"
+    }
+]

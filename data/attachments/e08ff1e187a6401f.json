@@ -1,0 +1,10 @@
+[
+    {
+        "app_name": "gs_as",
+        "platform": "as"
+    },
+    {
+        "app_name": "hs_as",
+        "platform": "as"
+    }
+]

@@ -1,4 +1,3 @@
-import datetime
 import allure
 from test_helpers.helpers import execute_query_and_log
 
@@ -25,7 +24,7 @@ def test_date_range(setup):
 
     # Используем вспомогательную функцию для выполнения запроса и логирования в Allure
     results = execute_query_and_log(bq_client, query, "Проверка дат установки в ожидаемом диапазоне",
-                                    include_query_in_message=True)
+                                    include_query_in_message=False)
     count_out_of_range = next(results).cnt  # Получаем количество записей за пределами диапазона
 
     # Проверка, что нет записей с датами установки вне заданного диапазона
@@ -58,7 +57,7 @@ def test_data_type_consistency(setup):
 
     # Используем вспомогательную функцию для выполнения запроса и логирования его в Allure.
     results = execute_query_and_log(bq_client, query_installs, "Проверка типов данных столбца installs",
-                                    include_query_in_message=True)
+                                    include_query_in_message=False)
 
     # Собираем список записей с потенциально некорректными значениями installs.
     """ 
@@ -107,7 +106,7 @@ def test_unrealistic_high_installs(setup):
     # Используем нашу вспомогательную функцию для выполнения запроса и логирования его в Allure.
     results = execute_query_and_log(bq_client, query,
                                     f"Проверка наличия неправдоподобно высоких значений установок, порог: {threshold}",
-                                    include_query_in_message=True)
+                                    include_query_in_message=False)
 
     # Преобразуем результаты в список для подсчета их количества
     excessive_installs = [(row.app_name, row.total_installs) for row in results]
@@ -141,7 +140,7 @@ def test_undefined_device_model_installs(setup):
 
     # Используем вспомогательную функцию для выполнения запроса и логирования его в Allure.
     results = execute_query_and_log(bq_client, query, "Поиск установок с неопределенной моделью устройства",
-                                    include_query_in_message=True)
+                                    include_query_in_message=False)
 
     # Преобразуем результаты запроса в список кортежей для дальнейшего анализа.
     undefined_device_model_installs = [(row.app_name, row.total_installs) for row in results]
@@ -186,7 +185,7 @@ def test_v_agg_data_segment_existence(setup):
     """
     # Выполнение запроса и логирование его в Allure с помощью функции execute_query_and_log.
     results = execute_query_and_log(bq_client, query, "Проверка существования сегментов устройства",
-                                    include_query_in_message=True)
+                                    include_query_in_message=False)
 
     # Преобразуем результаты запроса в список отсутствующих сегментов устройства.
     missing_segments = [row.device_segment for row in results]

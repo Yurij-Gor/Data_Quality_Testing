@@ -20,7 +20,7 @@ def test_install_date_post_2020(setup):
     """
 
     # Используем вспомогательную функцию для выполнения SQL-запроса и логирования в Allure
-    results = execute_query_and_log(bq_client, query, "Проверка отсутствия установок до 1 января 2020 года", include_query_in_message=True)
+    results = execute_query_and_log(bq_client, query, "Проверка отсутствия установок до 1 января 2020 года", include_query_in_message=False)
     for row in results:
         with allure.step(f"Проверка, что количество установок = 0, фактически получено: {row.cnt}"):
             assert row.cnt == 0, "Should be 0 installations before 2020-01-01"  # Проверка условия теста
@@ -46,7 +46,7 @@ def test_positive_installs(setup):
     # Используем вспомогательную функцию для выполнения SQL-запроса и логирования в Allure
     results = execute_query_and_log(bq_client, query,
                                     "Проверка на отсутствие установок с нулевым или отрицательным количеством",
-                                    include_query_in_message=True)
+                                    include_query_in_message=False)
     for row in results:
         with allure.step(f"Проверка, что количество установок > 0, фактически получено: {row.cnt}"):
             assert row.cnt == 0, "Should be 0 installations with non-positive numbers"  # Проверка условия теста
@@ -76,7 +76,7 @@ def test_non_target_device_segments_absent(setup):
     # Используем вспомогательную функцию для выполнения SQL-запроса и логирования в Allure
     detailed_results = execute_query_and_log(bq_client, detailed_query,
                                              "Проверка отсутствия нецелевых сегментов устройств",
-                                             include_query_in_message=True)
+                                             include_query_in_message=False)
 
     detailed_failures = []
     with allure.step("Сбор нецелевых сегментов устройств"):
@@ -114,7 +114,7 @@ def test_no_duplicates_in_view(setup):
     # Используем вспомогательную функцию для выполнения SQL-запроса и логирования в Allure
     results = execute_query_and_log(bq_client, query,
                                     "Проверка наличия дубликатов в представлении v_agg_data",
-                                    include_query_in_message=True)
+                                    include_query_in_message=False)
 
     # Собираем найденные дубликаты в список для удобства отображения в сообщении об ошибке
     duplicate_records = []
@@ -169,7 +169,7 @@ def test_v_agg_data_proper_segment_use(setup):
 
     # Выполнение запроса и логирование его в Allure
     segment_checks = execute_query_and_log(bq_client, query, "Проверка соответствия сегментов устройств",
-                                           include_query_in_message=True)
+                                           include_query_in_message=False)
 
     # Сбор и проверка результатов
     missing_segments = [(row.device_model, row.device_segment) for row in segment_checks if row.segment_status == 'Missing']
@@ -214,7 +214,7 @@ def test_non_target_device_usage(setup):
     # Выполнение запроса и логирование в Allure.
     results = execute_query_and_log(bq_client, query,
                                     "Проверка некорректного использования 'non_target_device'",
-                                    include_query_in_message=True)
+                                    include_query_in_message=False)
 
     # Сбор информации о моделях и сегментах для сообщения об ошибке.
     incorrect_models = []

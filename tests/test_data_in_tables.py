@@ -34,7 +34,7 @@ def test_device_models_match(setup):
     # Используем нашу вспомогательную функцию для выполнения запроса и логирования его в Allure.
     results = execute_query_and_log(bq_client, query,
                                     "Проверка соответствия моделей устройств",
-                                    include_query_in_message=True)
+                                    include_query_in_message=False)
 
     # Преобразуем результаты в список для удобства работы с ними далее.
     missing_models = [row.device_model_upper for row in results]
@@ -74,7 +74,7 @@ def test_app_names_match(setup):
 
     # Используем нашу вспомогательную функцию для выполнения запроса и логирования его в Allure.
     results = execute_query_and_log(bq_client, query, "Проверка соответствия названий приложений и платформ",
-                                    include_query_in_message=True)
+                                    include_query_in_message=False)
 
     # Сбор непрошедших проверку элементов
     failed_items = [(row.app_name, row.platform) for row in results]
@@ -115,7 +115,7 @@ def test_missing_device_data(setup):
     """
 
     results = execute_query_and_log(bq_client, query, "Поиск данных без соответствий в device_segments",
-                                    include_query_in_message=True)
+                                    include_query_in_message=False)
 
     failed_items = [(row.app_id, row.device_model, row.app_name, row.platform) for row in results]
 
@@ -149,7 +149,7 @@ def test_device_segments_uniqueness(setup):
     """
 
     results = execute_query_and_log(bq_client, query, "Поиск дубликатов в device_segments",
-                                    include_query_in_message=True)
+                                    include_query_in_message=False)
 
     duplicates = [(row.device_model, row.segment, row.cnt) for row in results]
 
@@ -183,7 +183,7 @@ def test_agg_data_date_range(setup):
 
     # Используем нашу вспомогательную функцию для выполнения запроса и логирования его в Allure
     results = execute_query_and_log(bq_client, query, "Проверка диапазона дат установки приложений",
-                                    include_query_in_message=True)
+                                    include_query_in_message=False)
 
     # Получаем количество записей, выходящих за пределы заданного диапазона дат, и преобразуем результат запроса
     count_out_of_range = next(results).cnt
@@ -215,7 +215,7 @@ def test_agg_data_positive_installs(setup):
 
     # Выполнение запроса и логирование в Allure
     results = execute_query_and_log(bq_client, query, "Поиск неположительных значений installs",
-                                    include_query_in_message=True)
+                                    include_query_in_message=False)
 
     # Извлечение количества записей с неположительными значениями installs
     count_non_positive = next(results).cnt
@@ -253,7 +253,7 @@ def test_app_names_consistency(setup):
     # Выполнение запроса и логирование в Allure
     missing_app_ids = execute_query_and_log(bq_client, query,
                                             "Проверка соответствия app_id между agg_data и app_names",
-                                            include_query_in_message=True)
+                                            include_query_in_message=False)
 
     # Преобразуем результаты в список app_id для удобства ассерта
     missing_app_ids_list = [row.app_id for row in missing_app_ids]
@@ -291,7 +291,7 @@ def test_app_names_no_duplicate_ids(setup):
     # Используем вспомогательную функцию для выполнения запроса и логирования его в Allure
     duplicates = execute_query_and_log(bq_client, query,
                                        "Поиск дубликатов app_id с различными app_name или platform",
-                                       include_query_in_message=True)
+                                       include_query_in_message=False)
 
     # Преобразуем результаты запроса в список для удобства последующей проверки.
     # Каждый элемент списка содержит app_id и количество уникальных значений app_name и platform для данного app_id.
@@ -333,7 +333,7 @@ def test_app_names_platform_consistency(setup):
     # Используем нашу вспомогательную функцию для выполнения запроса и логирования его в Allure.
     inconsistencies = execute_query_and_log(bq_client, query,
                                             "Проверка согласованности имен приложений и платформ",
-                                            include_query_in_message=True)
+                                            include_query_in_message=False)
 
     # Преобразуем результаты запроса в список для удобства последующей проверки.
     inconsistencies_details = [(row.app_name, row.platform) for row in inconsistencies]

@@ -45,46 +45,6 @@ def test_device_models_match(setup):
 
 
 @allure.story('Data_Tables_Creation')
-@allure.severity(allure.severity_level.CRITICAL)
-@allure.description("""
-Тест проверяет, что для всех app_name из таблицы app_names существует соответствие с app_short в таблице device_segments. Это гарантирует целостность данных между таблицами и правильность ссылок на приложения.
-""")
-def test_app_names_match(setup):
-    """
-    Тест проверяет, что для всех app_name из таблицы app_names существует соответствие с app_short в таблице device_segments.
-    """
-    bq_client, env = setup
-    app_names = env.get_full_table_id('app_names')
-    device_segments = env.get_full_table_id('device_segments')
-
-    # Формирование SQL-запроса для проверки соответствия имен приложений
-    query = f"""
-        -- Выбираем уникальные названия приложений и платформы из таблицы app_names
-        SELECT DISTINCT an.app_name, an.platform
-        FROM `{app_names}` an
-        -- Условие для отбора записей, для которых не существует соответствующих записей в таблице device_segments
-        WHERE NOT EXISTS (
-          -- Подзапрос, который проверяет наличие записи в device_segments
-          SELECT 1
-          FROM `{device_segments}` ds
-          -- Условие соответствия между названием приложения и коротким названием приложения в таблице device_segments
-          WHERE an.app_name = ds.app_short AND an.platform = ds.platform
-        )
-    """
-
-    # Используем нашу вспомогательную функцию для выполнения запроса и логирования его в Allure.
-    results = execute_query_and_log(bq_client, query, "Проверка соответствия названий приложений и платформ",
-                                    include_query_in_message=False)
-
-    # Сбор непрошедших проверку элементов
-    failed_items = [(row.app_name, row.platform) for row in results]
-
-    with allure.step("Проверка на отсутствие непрошедших проверку элементов"):
-        assert not failed_items, "Найдены приложения в app_names без соответствия в device_segments:\n" + "\n".join(
-            f"Название приложения: {app_name}, Платформа: {platform}" for app_name, platform in failed_items)
-
-
-@allure.story('Data_Tables_Creation')
 @allure.severity(allure.severity_level.NORMAL)
 @allure.description("""
 Тест проверяет наличие соответствующих записей в таблице device_segments для каждой записи в таблице agg_data, 

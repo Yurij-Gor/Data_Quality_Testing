@@ -150,3 +150,4 @@ Data_Quality_Testing/
 ## Test Results
 View the Allure Test Report:  
 [Allure Report](https://yurij-gor.github.io/Data_Quality_Testing/)
+

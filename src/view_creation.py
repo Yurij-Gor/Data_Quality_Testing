@@ -3,20 +3,20 @@ from google.cloud import bigquery
 from google.oauth2 import service_account
 from dotenv import load_dotenv
 
-# Загрузка переменных окружения из файла, находящегося в корне проекта
+# Load environment variables from a file located at the project root
 dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
 load_dotenv(dotenv_path=dotenv_path)
 
-# Инициализация переменных окружения
+# Initialize environment variables
 service_account_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 project_id = os.getenv("GCP_PROJECT_ID")
 dataset_id = os.getenv("BIGQUERY_DATASET_ID")
 
-# Создание клиента BigQuery
+# Create a BigQuery client
 credentials = service_account.Credentials.from_service_account_file(service_account_path)
 client = bigquery.Client(credentials=credentials, project=project_id)
 
-# Код SQL для создания вьюхи с явными полными названиями таблиц
+# SQL code for creating a view with explicit full table names
 view_query = f"""
 CREATE OR REPLACE VIEW `{project_id}.{dataset_id}.v_agg_data` AS
 WITH agg AS (
@@ -56,9 +56,9 @@ LEFT JOIN
     ON `{project_id}.{dataset_id}.app_names`.platform = `{project_id}.{dataset_id}.geo_segments`.platform AND `{project_id}.{dataset_id}.geo_segments`.ua_team = 'Network';
 """
 
-# Выполнение запроса на создание вьюхи
+# Execute the query to create the view
 try:
-    client.query(view_query).result()  # Попытка выполнить запрос на создание вьюхи
+    client.query(view_query).result()  # Attempt to execute the query to create the view
     print("View v_agg_data has been created successfully.")
 except Exception as e:
     print(f"Failed to create view v_agg_data: {e}")

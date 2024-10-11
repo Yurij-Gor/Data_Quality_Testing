@@ -4,20 +4,20 @@ from google.cloud import bigquery
 from google.oauth2 import service_account
 from dotenv import load_dotenv
 
-# Загрузка переменных окружения из файла, находящегося в корне проекта
+# Load environment variables from a file located at the project root
 dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
 load_dotenv(dotenv_path=dotenv_path)
 
-# Инициализация переменных окружения
+# Initialize environment variables
 service_account_path = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 project_id = os.getenv("GCP_PROJECT_ID")
 dataset_id = os.getenv("BIGQUERY_DATASET_ID")
 
-# Создание клиента BigQuery
+# Create a BigQuery client
 credentials = service_account.Credentials.from_service_account_file(service_account_path)
 client = bigquery.Client(credentials=credentials, project=project_id)
 
-# Схемы таблиц
+# Table schemas
 schema_agg_data = [
     bigquery.SchemaField("app_id", "INTEGER"),
     bigquery.SchemaField("install_date", "DATE"),
@@ -46,7 +46,7 @@ schema_geo_segments = [
     bigquery.SchemaField("ua_team", "STRING"),
 ]
 
-# Функция для загрузки данных из JSON файла в BigQuery с указанием схемы
+# Function to load data from a JSON file into BigQuery with a specified schema
 def load_json_to_bigquery(client, dataset_id, json_filepath, table_name, schema):
     table_id = f"{client.project}.{dataset_id}.{table_name}"
     job_config = bigquery.LoadJobConfig(
@@ -57,11 +57,11 @@ def load_json_to_bigquery(client, dataset_id, json_filepath, table_name, schema)
 
     with open(json_filepath, 'rb') as file:
         job = client.load_table_from_json(json.load(file), table_id, job_config=job_config)
-    job.result()  # Ожидание завершения задачи
+    job.result()  # Wait for the job to complete
     print(f"Data loaded into {table_id}")
     return table_id
 
-# Функция для обновления файла .env
+# Function to update the .env file
 def update_env_file(env_path, updates):
     with open(env_path, 'r') as file:
         lines = file.readlines()
@@ -78,7 +78,8 @@ def update_env_file(env_path, updates):
     with open(env_path, 'w') as file:
         file.writelines(new_lines)
 
-# Определение путей и загрузка данных с явным указанием схемы
+
+# Define paths and load data with explicit schema
 base_path = os.path.join(os.path.dirname(__file__), '..', 'data')
 json_files_schemas = {
     "agg_data.json": ("agg_data", schema_agg_data),

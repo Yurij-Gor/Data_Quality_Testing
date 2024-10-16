@@ -2,89 +2,88 @@ import allure
 from test_helpers.helpers import execute_query_and_log
 
 
-# Тест на проверку отсутствия установок приложений до 1 января 2020 года
+# Test to verify that there are no app installations before January 1, 2020
 @allure.severity(allure.severity_level.CRITICAL)
-@allure.description("Тестирование, что нет установок приложений до 1 января 2020 года.")
+@allure.description("Testing that there are no app installations before January 1, 2020.")
 @allure.story('View_Creation')
 def test_install_date_post_2020(setup):
-    """Тестирование, что нет установок приложений до 1 января 2020 года."""
-    bq_client, env = setup  # Распаковываем возвращаемые значения фикстуры
-    v_agg_data = env.get_full_table_id('v_agg_data')  # Получаем полный ID таблицы v_agg_data
+    """Testing that there are no app installations before January 1, 2020."""
+    bq_client, env = setup  # Unpacking the values returned by the fixture
+    v_agg_data = env.get_full_table_id('v_agg_data')  # Get the full ID of the v_agg_data table
     query = f"""
-        -- Вычисляем количество записей, у которых дата установки приложения меньше 1 января 2020 года
+        -- Calculate the number of records where the app installation date is before January 1, 2020
         SELECT COUNT(*) as cnt
-        -- Из таблицы v_agg_data,
+        -- From the v_agg_data table,
         FROM `{v_agg_data}`
-        -- Условие для фильтрации записей по дате установки
+        -- Condition to filter records by installation date
         WHERE install_date < '2020-01-01'
     """
 
-    # Используем вспомогательную функцию для выполнения SQL-запроса и логирования в Allure
-    results = execute_query_and_log(bq_client, query, "Проверка отсутствия установок до 1 января 2020 года", include_query_in_message=False)
+    # Use the helper function to execute the SQL query and log it in Allure
+    results = execute_query_and_log(bq_client, query, "Check for no installations before January 1, 2020", include_query_in_message=False)
     for row in results:
-        with allure.step(f"Проверка, что количество установок = 0, фактически получено: {row.cnt}"):
-            assert row.cnt == 0, "Should be 0 installations before 2020-01-01"  # Проверка условия теста
+        with allure.step(f"Check that the number of installations = 0, actual: {row.cnt}"):
+            assert row.cnt == 0, "Should be 0 installations before 2020-01-01"  # Test condition check
 
 
-# Тест на проверку отсутствия установок с нулевым или отрицательным количеством
+# Test to verify that there are no installations with zero or negative amounts
 @allure.severity(allure.severity_level.CRITICAL)
-@allure.description("Тестирование, что нет установок с нулевым или отрицательным количеством.")
+@allure.description("Testing that there are no installations with zero or negative amounts.")
 @allure.story('View_Creation')
 def test_positive_installs(setup):
-    """Тестирование, что нет установок с нулевым или отрицательным количеством."""
-    bq_client, env = setup  # Распаковываем возвращаемые значения фикстуры
-    v_agg_data = env.get_full_table_id('v_agg_data')  # Получаем полный ID таблицы v_agg_data
+    """Testing that there are no installations with zero or negative amounts."""
+    bq_client, env = setup  # Unpacking the values returned by the fixture
+    v_agg_data = env.get_full_table_id('v_agg_data')  # Get the full ID of the v_agg_data table
     query = f"""
-        -- Подсчет количества записей, где количество установок меньше или равно нулю
+        -- Count the number of records where the number of installations is less than or equal to zero
         SELECT COUNT(*) as cnt
-        -- Обращение к таблице v_agg_data
+        -- Access the v_agg_data table
         FROM `{v_agg_data}`
-        -- Условие фильтрации записей по количеству установок
+        -- Condition to filter records by the number of installations
         WHERE installs <= 0
     """
 
-    # Используем вспомогательную функцию для выполнения SQL-запроса и логирования в Allure
+    # Use the helper function to execute the SQL query and log it in Allure
     results = execute_query_and_log(bq_client, query,
-                                    "Проверка на отсутствие установок с нулевым или отрицательным количеством",
+                                    "Check for no installations with zero or negative amounts",
                                     include_query_in_message=False)
     for row in results:
-        with allure.step(f"Проверка, что количество установок > 0, фактически получено: {row.cnt}"):
-            assert row.cnt == 0, "Should be 0 installations with non-positive numbers"  # Проверка условия теста
+        with allure.step(f"Check that the number of installations > 0, actual: {row.cnt}"):
+            assert row.cnt == 0, "Should be 0 installations with non-positive numbers" # Test condition check
 
 
-# Тест на проверку отсутствия записей с нецелевыми сегментами устройств
+# Test to verify that there are no records with non-target device segments
 @allure.story('View_Creation')
 @allure.severity(allure.severity_level.NORMAL)
 @allure.description("""
-Тест проверяет отсутствие записей с нецелевыми сегментами устройств в представлении v_agg_data. 
-Нецелевые сегменты - это те, которые не указаны или явно обозначены как 'non_target_device'.
+Tests the absence of records with non-target device segments in the v_agg_data view. 
+Non-target segments are those that are either unspecified or explicitly marked as 'non_target_device'.
 """)
 def test_non_target_device_segments_absent(setup):
-    bq_client, env = setup  # Распаковываем возвращаемые значения фикстуры
-    v_agg_data = env.get_full_table_id('v_agg_data')  # Получаем полный ID таблицы v_agg_data
+    bq_client, env = setup  # Unpacking the values returned by the fixture
+    v_agg_data = env.get_full_table_id('v_agg_data')  # Get the full ID of the v_agg_data table
     detailed_query = f"""
-        -- Выбор модели устройства и сегмента устройства из вьюхи v_agg_data
+        -- Select the device model and device segment from the v_agg_data view
         SELECT device_model, device_segment
         FROM `{v_agg_data}`
-        -- Условие фильтрации для поиска записей, где сегмент устройства не указан (NULL)
-        -- или явно указан как 'non_target_device'. Это условие помогает найти
-        -- нецелевые сегменты устройств, которые потенциально могут представлять
-        -- интерес для анализа или требовать дополнительных действий по коррекции данных.
+        -- Condition to filter records where the device segment is either unspecified (NULL)
+        -- or explicitly marked as 'non_target_device'. This helps identify
+        -- non-target device segments that may require additional data correction actions.
         WHERE device_segment IS NULL OR device_segment = 'non_target_device'
     """
 
-    # Используем вспомогательную функцию для выполнения SQL-запроса и логирования в Allure
+    # Use the helper function to execute the SQL query and log it in Allure
     detailed_results = execute_query_and_log(bq_client, detailed_query,
-                                             "Проверка отсутствия нецелевых сегментов устройств",
+                                             "Check for the absence of non-target device segments",
                                              include_query_in_message=False)
 
     detailed_failures = []
-    with allure.step("Сбор нецелевых сегментов устройств"):
+    with allure.step("Collecting non-target device segments"):
         for row in detailed_results:
             if row.device_segment is None or row.device_segment == 'non_target_device':
                 detailed_failures.append((row.device_model, row.device_segment or 'NULL'))
 
-    with allure.step("Проверка, что не найдены нецелевые сегменты устройств"):
+    with allure.step("Verify that no non-target device segments are found"):
         assert len(
             detailed_failures) == 0, f"Expected 0 non-target device segments, found: {len(detailed_failures)}\n" + \
                                      "\n".join(f"Device Model: {model}, Segment: {segment}" for model, segment in
@@ -94,39 +93,39 @@ def test_non_target_device_segments_absent(setup):
 @allure.story('View_Creation')
 @allure.severity(allure.severity_level.NORMAL)
 @allure.description("""
-Проверяет отсутствие дубликатов в представлении v_agg_data. Дубликаты могут указывать на проблемы в процессе сбора или обработки данных.
+Verifies the absence of duplicates in the v_agg_data view. Duplicates may indicate issues in the data collection or processing process.
 """)
 def test_no_duplicates_in_view(setup):
     """
-    Проверка на отсутствие дубликатов в вьюхе v_agg_data.
+     Verifies the absence of duplicates in the v_agg_data view.
     """
-    bq_client, env = setup  # Распаковываем возвращаемые значения фикстуры
-    v_agg_data = env.get_full_table_id('v_agg_data')  # Получаем полный ID таблицы v_agg_data
+    bq_client, env = setup  # Unpacking the values returned by the fixture
+    v_agg_data = env.get_full_table_id('v_agg_data')  # Get the full ID of the v_agg_data table
 
-    # Формируем SQL запрос для проверки наличия дубликатов в данных
+    # Form the SQL query to check for duplicates in the data
     query = f"""
         SELECT app_name, device_model, install_date, installs, device_segment, COUNT(*) as cnt
-        FROM `{v_agg_data}`  -- Из представления v_agg_data
-        GROUP BY app_name, device_model, install_date, installs, device_segment  -- Группировка по ключевым полям
-        HAVING cnt > 1  -- Условие для отбора групп с количеством записей больше одной (дубликаты)
+        FROM `{v_agg_data}`  -- From the v_agg_data view
+        GROUP BY app_name, device_model, install_date, installs, device_segment  -- Group by key fields
+        HAVING cnt > 1  -- Condition to select groups with more than one record (duplicates)
     """
 
-    # Используем вспомогательную функцию для выполнения SQL-запроса и логирования в Allure
+    # Use the helper function to execute the SQL query and log it in Allure
     results = execute_query_and_log(bq_client, query,
-                                    "Проверка наличия дубликатов в представлении v_agg_data",
+                                    "Checking for duplicates in the v_agg_data view",
                                     include_query_in_message=False)
 
-    # Собираем найденные дубликаты в список для удобства отображения в сообщении об ошибке
+    # Collect duplicate records for easier display in the error message
     duplicate_records = []
-    with allure.step("Сбор информации о найденных дубликатах"):
+    with allure.step("Collecting information about found duplicates"):
         for row in results:
             duplicate_records.append(
                 (row.app_name, row.device_model, row.install_date, row.installs, row.device_segment, row.cnt))
 
-    # Проверяем, что список найденных дубликатов пуст, иначе фиксируем нарушение
-    with allure.step("Проверка, что дубликаты отсутствуют"):
-        assert len(duplicate_records) == 0, "Найдены дубликаты в вьюхе:\n" + "\n".join(
-            f"Приложение: {record[0]}, Модель устройства: {record[1]}, Дата установки: {record[2]}, Установки: {record[3]}, Сегмент устройства: {record[4]}, Количество: {record[5]}"
+    # Check that the list of duplicates is empty; otherwise, report the issue
+    with allure.step("Verify that there are no duplicates"):
+        assert len(duplicate_records) == 0, "Duplicates found in the view:\n" + "\n".join(
+            f"App: {record[0]}, Device Model: {record[1]}, Install Date: {record[2]}, Installs: {record[3]}, Device Segment: {record[4]}, Count: {record[5]}"
             for record in duplicate_records
         )
 
@@ -134,92 +133,92 @@ def test_no_duplicates_in_view(setup):
 @allure.story('View_Creation')
 @allure.severity(allure.severity_level.CRITICAL)
 @allure.description("""
-Проверка соответствия указанных сегментов устройств в представлении v_agg_data с сегментами, присутствующими в таблице device_segments.
+Verifies that the device segments specified in the v_agg_data view match those present in the device_segments table.
 """)
 def test_v_agg_data_proper_segment_use(setup):
     """
-    Проверка соответствия сегментов устройств между v_agg_data и device_segments.
-    Этот тест удостоверяется, что каждый сегмент устройства, указанный в представлении v_agg_data,
-    существует в таблице device_segments, кроме случая сегмента 'non_target_device',
-    который является допустимым значением по умолчанию.
+    Verifies the consistency of device segments between v_agg_data and device_segments.
+    This test ensures that each device segment specified in the v_agg_data view
+    exists in the device_segments table, except for the 'non_target_device' segment,
+    which is an acceptable default value.
     """
 
-    # Инициализация клиента BigQuery и получение идентификаторов таблиц
+    # Initialize BigQuery client and retrieve table identifiers
     bq_client, env = setup
     v_agg_data = env.get_full_table_id('v_agg_data')
     device_segments = env.get_full_table_id('device_segments')
 
-    # SQL-запрос для проверки наличия каждого сегмента устройства из v_agg_data в таблице device_segments
+    # SQL query to check that each device segment in v_agg_data exists in the device_segments table
     query = f"""
     SELECT 
       v.device_model, 
       v.device_segment,
       CASE 
-        WHEN d.device_model IS NULL THEN 'Missing'  -- Если нет соответствия в таблице device_segments, ставим статус 'Missing'
-        ELSE 'Present'  -- Если есть соответствие, ставим статус 'Present'
+        WHEN d.device_model IS NULL THEN 'Missing'  -- If there's no match in the device_segments table, set status to 'Missing'
+        ELSE 'Present'  -- If there's a match, set status to 'Present'
       END AS segment_status
     FROM (
       SELECT DISTINCT device_model, device_segment
-      FROM `{v_agg_data}`  -- Выбираем уникальные пары модель устройства и сегмент из v_agg_data
-      WHERE device_segment != 'non_target_device'  -- Исключаем сегмент 'non_target_device', так как он не требует проверки
+      FROM `{v_agg_data}`  -- Select unique pairs of device model and segment from v_agg_data
+      WHERE device_segment != 'non_target_device'  -- Exclude the 'non_target_device' segment as it doesn't need validation
     ) AS v
-    LEFT JOIN `{device_segments}` AS d  -- Присоединяем таблицу device_segments
-    ON v.device_model = d.device_model AND v.device_segment = d.segment  -- Условие присоединения: совпадение модели и сегмента
+    LEFT JOIN `{device_segments}` AS d  -- Join the device_segments table
+    ON v.device_model = d.device_model AND v.device_segment = d.segment  -- Join condition: matching model and segment
     """
 
-    # Выполнение запроса и логирование его в Allure
-    segment_checks = execute_query_and_log(bq_client, query, "Проверка соответствия сегментов устройств",
+    # Execute the query and log it in Allure
+    segment_checks = execute_query_and_log(bq_client, query, "Verifying device segment consistency",
                                            include_query_in_message=False)
 
-    # Сбор и проверка результатов
+    # Collect and verify results
     missing_segments = [(row.device_model, row.device_segment) for row in segment_checks if row.segment_status == 'Missing']
 
-    # Ассерт на отсутствие отсутствующих сегментов
-    with allure.step("Проверка на отсутствие недостающих сегментов устройств"):
-        assert not missing_segments, f"Найдены отсутствующие сегменты устройств в device_segments: {missing_segments}"
+    # Assert no missing segments
+    with allure.step("Verify the absence of missing device segments"):
+        assert not missing_segments, f"Missing device segments found in device_segments: {missing_segments}"
 
 
 @allure.story('View_Creation')
 @allure.severity(allure.severity_level.CRITICAL)
 @allure.description("""
-Проверка использования 'non_target_device' в представлении v_agg_data только в случаях отсутствия сегментов устройств в таблице device_segments.
+Verifies that 'non_target_device' is used in the v_agg_data view only when there are no device segments available in the device_segments table.
 """)
 def test_non_target_device_usage(setup):
     """
-    Проверка корректности использования 'non_target_device' в v_agg_data.
-    Этот тест проверяет, что 'non_target_device' используется только когда нет соответствующих сегментов в device_segments.
-    Если модели устройств есть в device_segments, использование 'non_target_device' считается ошибочным.
+    Verifies the correct use of 'non_target_device' in v_agg_data.
+    This test ensures that 'non_target_device' is only used when there are no matching segments in device_segments.
+    If device models exist in device_segments, using 'non_target_device' is considered incorrect.
     """
-    bq_client, env = setup  # Распаковываем возвращаемые значения фикстуры
-    v_agg_data = env.get_full_table_id('v_agg_data')  # Получаем полный ID таблицы v_agg_data
-    device_segments = env.get_full_table_id('device_segments')  # Получаем полный идентификатор таблицы device_segments
+    bq_client, env = setup  # Unpack the fixture's return values
+    v_agg_data = env.get_full_table_id('v_agg_data')  # Get the full ID of the v_agg_data table
+    device_segments = env.get_full_table_id('device_segments')  # Get the full identifier of the device_segments table
 
-    # Формирование запроса для выборки моделей устройств с 'non_target_device' и проверка на их наличие в device_segments.
+    # Form the query to select device models with 'non_target_device' and check their presence in device_segments.
     query = f"""
-    -- Выборка моделей устройств, помеченных как 'non_target_device', и проверка на их наличие в таблице device_segments.
-    -- В случае если модель присутствует в device_segments, это указывает на ошибочное использование метки 'non_target_device'.
+    -- Select device models marked as 'non_target_device' and check their presence in the device_segments table.
+    -- If the model exists in device_segments, it indicates incorrect use of the 'non_target_device' label.
     SELECT 
       v.device_model, 
-      STRING_AGG(d.segment) AS expected_segments  -- Агрегируем все сегменты, связанные с моделью устройства, в строку.
+      STRING_AGG(d.segment) AS expected_segments  -- Aggregate all segments associated with the device model into a string.
     FROM (
-      SELECT DISTINCT device_model  -- Выборка уникальных моделей устройств с меткой 'non_target_device' из v_agg_data.
+      SELECT DISTINCT device_model  -- Select unique device models labeled as 'non_target_device' from v_agg_data.
       FROM `{v_agg_data}`
       WHERE device_segment = 'non_target_device'
     ) v
-    LEFT JOIN `{device_segments}` d ON v.device_model = d.device_model  -- Соединяем с таблицей device_segments для проверки наличия модели.
+    LEFT JOIN `{device_segments}` d ON v.device_model = d.device_model  -- Join with device_segments to check model existence.
     GROUP BY v.device_model
-    HAVING COUNT(d.segment) > 0  -- Отбираем только те случаи, где модель имеет хотя бы один сегмент в device_segments.
+    HAVING COUNT(d.segment) > 0  -- Select only cases where the model has at least one segment in device_segments.
     """
 
-    # Выполнение запроса и логирование в Allure.
+    # Execute the query and log it in Allure
     results = execute_query_and_log(bq_client, query,
-                                    "Проверка некорректного использования 'non_target_device'",
+                                    "Checking incorrect use of 'non_target_device 'non_target_device'",
                                     include_query_in_message=False)
 
-    # Сбор информации о моделях и сегментах для сообщения об ошибке.
+    # Collect information about models and segments for the error message.
     incorrect_models = []
     for row in results:
-        incorrect_models.append(f"Модель: '{row.device_model}', Ожидаемые сегменты: [{row.expected_segments}]")
+        incorrect_models.append(f"Model: '{row.device_model}', Expected segments: [{row.expected_segments}]")
 
-    # Ассерт, проверяющий, что не найдены модели устройств, ошибочно помеченные как 'non_target_device'.
-    assert not incorrect_models, "Обнаружено некорректное использование 'non_target_device':\n" + "\n".join(incorrect_models)
+    # Assert that no device models are incorrectly marked as 'non_target_device'.
+    assert not incorrect_models, "Incorrect use of 'non_target_device' found:\n" + "\n".join(incorrect_models)

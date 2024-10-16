@@ -1,0 +1,9 @@
+
+        -- Count total installs per application
+        SELECT app_name, SUM(installs) as total_installs
+        FROM `data-quality-project-1.dq_data_set.v_agg_data`
+        -- Group by application name
+        GROUP BY app_name
+        -- Filter applications where total installs exceed the set threshold
+        HAVING total_installs > 1000000
+    

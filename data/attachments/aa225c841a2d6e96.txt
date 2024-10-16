@@ -1,0 +1,7 @@
+
+    -- Select records with installation dates outside the expected range
+    -- The condition checks that the installation date is not earlier than '2020-01-01' and not later than the current date
+    SELECT COUNT(*) as cnt
+    FROM `data-quality-project-1.dq_data_set.v_agg_data`
+    WHERE install_date < '2020-01-01' OR install_date > CURRENT_DATE()
+    

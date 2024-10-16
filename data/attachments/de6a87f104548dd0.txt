@@ -1,0 +1,13 @@
+
+        -- Select unique device segments from v_agg_data
+        SELECT DISTINCT v.device_segment
+        FROM `data-quality-project-1.dq_data_set.v_agg_data` v
+        -- Filter segments other than 'non_target_device' and check their existence in device_segments
+        WHERE v.device_segment <> 'non_target_device' AND NOT EXISTS (
+            -- Subquery checks if the segment from v_agg_data exists in device_segments.
+            -- 'SELECT 1' is used to verify the existence of the record: returns 1 if a record is found.
+            SELECT 1
+            FROM `data-quality-project-1.dq_data_set.device_segments` ds
+            WHERE v.device_segment = ds.segment
+        )
+    

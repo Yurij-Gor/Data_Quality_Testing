@@ -1,64 +1,64 @@
 "DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"
-Tests the absence of records with non-target device segments in the v_agg_data view. 
-Non-target segments are those that are either unspecified or explicitly marked as 'non_target_device'.
-","2035","test_non_target_device_segments_absent","tests","Wed Oct 16 15:02:46 UTC 2024","failed","Wed Oct 16 15:02:48 UTC 2024","","test_v_agg_data","",""
-"
-Ensures that there are no records in the agg_data table with an installation date earlier than January 1, 2020, 
-ensuring the data's relevance and correctness.
-","1358","test_agg_data_date_range","tests","Wed Oct 16 15:02:38 UTC 2024","passed","Wed Oct 16 15:02:39 UTC 2024","","test_data_in_tables","",""
-"
-Verifies that every app_id from the agg_data table has a corresponding entry in the app_names table, ensuring data 
-consistency between tables.
-","937","test_app_names_consistency","tests","Wed Oct 16 15:02:40 UTC 2024","passed","Wed Oct 16 15:02:41 UTC 2024","","test_data_in_tables","",""
-"
-Verifies the absence of duplicates in the v_agg_data view. Duplicates may indicate issues in the data collection or processing process.
-","1436","test_no_duplicates_in_view","tests","Wed Oct 16 15:02:48 UTC 2024","failed","Wed Oct 16 15:02:50 UTC 2024","","test_v_agg_data","",""
-"Testing that there are no installations with zero or negative amounts.","1667","test_positive_installs","tests","Wed Oct 16 15:02:45 UTC 2024","passed","Wed Oct 16 15:02:46 UTC 2024","","test_v_agg_data","",""
-"
-Тест проверяет наличие установок приложений с неопределенной моделью устройства в представлении v_agg_data.
-","1622","test_undefined_device_model_installs","tests","Wed Oct 16 15:02:57 UTC 2024","failed","Wed Oct 16 15:02:59 UTC 2024","","test_v_agg_data_additional","",""
-"
-Тестирование на наличие неправдоподобно высоких значений установок в представлении v_agg_data. 
-Проверяется, что для всех приложений суммарное количество установок не превышает установленный порог.
-","1412","test_unrealistic_high_installs","tests","Wed Oct 16 15:02:56 UTC 2024","passed","Wed Oct 16 15:02:57 UTC 2024","","test_v_agg_data_additional","",""
-"
-Verifies that 'non_target_device' is used in the v_agg_data view only when there are no device segments available in the device_segments table.
-","1960","test_non_target_device_usage","tests","Wed Oct 16 15:02:51 UTC 2024","failed","Wed Oct 16 15:02:53 UTC 2024","","test_v_agg_data","",""
-"
-Verifies the app_names table to ensure there are no duplicate app_ids where the same app_id is associated with different 
-app_name or platform. 
-","1070","test_app_names_no_duplicate_ids","tests","Wed Oct 16 15:02:41 UTC 2024","passed","Wed Oct 16 15:02:42 UTC 2024","","test_data_in_tables","",""
-"
-Тестирование согласованности типов данных в столбце installs представления v_agg_data. 
-Проверяется, что все значения являются числовыми и корректно приводятся к типу INT64.
-","1129","test_data_type_consistency","tests","Wed Oct 16 15:02:55 UTC 2024","passed","Wed Oct 16 15:02:56 UTC 2024","","test_v_agg_data_additional","",""
-"
-Ensures that all values in the installs column of the agg_data table are positive, thereby guaranteeing that the 
-application installation data is valid and logical.
-","900","test_agg_data_positive_installs","tests","Wed Oct 16 15:02:39 UTC 2024","passed","Wed Oct 16 15:02:40 UTC 2024","","test_data_in_tables","",""
-"
-Tests the presence of corresponding entries in the device_segments table for each record in the agg_data table, 
-ensuring data integrity between apps and devices.
-","965","test_missing_device_data","tests","Wed Oct 16 15:02:36 UTC 2024","failed","Wed Oct 16 15:02:36 UTC 2024","","test_data_in_tables","",""
-"Тестирование того, что даты установки приложений находятся в ожидаемом диапазоне.","1480","test_date_range","tests","Wed Oct 16 15:02:53 UTC 2024","passed","Wed Oct 16 15:02:55 UTC 2024","","test_v_agg_data_additional","",""
-"
-Проверяет, что каждый сегмент устройства из v_agg_data существует в device_segments или помечен как 'non_target_device'.
-","1167","test_v_agg_data_segment_existence","tests","Wed Oct 16 15:02:59 UTC 2024","passed","Wed Oct 16 15:03:00 UTC 2024","","test_v_agg_data_additional","",""
-"
-Verifies that all device models from the agg_data table have corresponding entries in the device_segments table.
-Uses the UPPER() function to ignore case sensitivity.
-","1141","test_device_models_match","tests","Wed Oct 16 15:02:34 UTC 2024","passed","Wed Oct 16 15:02:36 UTC 2024","","test_data_in_tables","",""
-"
-Verifies the uniqueness of records in the device_segments table based on the combination of device_model and segment, 
-ensuring no duplicates, which is critical for data integrity.
-","1401","test_device_segments_uniqueness","tests","Wed Oct 16 15:02:37 UTC 2024","failed","Wed Oct 16 15:02:38 UTC 2024","","test_data_in_tables","",""
-"Testing that there are no app installations before January 1, 2020.","1494","test_install_date_post_2020","tests","Wed Oct 16 15:02:43 UTC 2024","passed","Wed Oct 16 15:02:45 UTC 2024","","test_v_agg_data","",""
-"
-Verifies that the device segments specified in the v_agg_data view match those present in the device_segments table.
-","1419","test_v_agg_data_proper_segment_use","tests","Wed Oct 16 15:02:50 UTC 2024","passed","Wed Oct 16 15:02:51 UTC 2024","","test_v_agg_data","",""
+"Testing that there are no installations with zero or negative amounts.","1534","test_positive_installs","tests","Wed Oct 16 16:15:46 UTC 2024","passed","Wed Oct 16 16:15:48 UTC 2024","","test_v_agg_data","",""
 "
 Verifies the consistency between app names and platforms in the app_names and device_segments tables. 
 This ensures that each app and its corresponding platform are correctly reflected in both tables, 
 maintaining data integrity.
-","994","test_app_names_platform_consistency","tests","Wed Oct 16 15:02:42 UTC 2024","failed","Wed Oct 16 15:02:43 UTC 2024","","test_data_in_tables","",""
+","924","test_app_names_platform_consistency","tests","Wed Oct 16 16:15:44 UTC 2024","failed","Wed Oct 16 16:15:45 UTC 2024","","test_data_in_tables","",""
+"Testing that the application installation dates are within the expected range.","1309","test_date_range","tests","Wed Oct 16 16:15:52 UTC 2024","passed","Wed Oct 16 16:15:54 UTC 2024","","test_v_agg_data_additional","",""
+"
+Tests the presence of corresponding entries in the device_segments table for each record in the agg_data table, 
+ensuring data integrity between apps and devices.
+","1057","test_missing_device_data","tests","Wed Oct 16 16:15:37 UTC 2024","failed","Wed Oct 16 16:15:39 UTC 2024","","test_data_in_tables","",""
+"
+Verifies the absence of duplicates in the v_agg_data view. Duplicates may indicate issues in the data collection or processing process.
+","1432","test_no_duplicates_in_view","tests","Wed Oct 16 16:15:49 UTC 2024","failed","Wed Oct 16 16:15:50 UTC 2024","","test_v_agg_data","",""
+"
+Ensures that all values in the installs column of the agg_data table are positive, thereby guaranteeing that the 
+application installation data is valid and logical.
+","855","test_agg_data_positive_installs","tests","Wed Oct 16 16:15:41 UTC 2024","passed","Wed Oct 16 16:15:42 UTC 2024","","test_data_in_tables","",""
+"
+Ensures that there are no records in the agg_data table with an installation date earlier than January 1, 2020, 
+ensuring the data's relevance and correctness.
+","1043","test_agg_data_date_range","tests","Wed Oct 16 16:15:40 UTC 2024","passed","Wed Oct 16 16:15:41 UTC 2024","","test_data_in_tables","",""
+"
+Tests the absence of records with non-target device segments in the v_agg_data view. 
+Non-target segments are those that are either unspecified or explicitly marked as 'non_target_device'.
+","1140","test_non_target_device_segments_absent","tests","Wed Oct 16 16:15:48 UTC 2024","failed","Wed Oct 16 16:15:49 UTC 2024","","test_v_agg_data","",""
+"
+Verifies that all device models from the agg_data table have corresponding entries in the device_segments table.
+Uses the UPPER() function to ignore case sensitivity.
+","1699","test_device_models_match","tests","Wed Oct 16 16:15:36 UTC 2024","passed","Wed Oct 16 16:15:37 UTC 2024","","test_data_in_tables","",""
+"
+Tests for application installs with undefined device models in the v_agg_data view.
+","1822","test_undefined_device_model_installs","tests","Wed Oct 16 16:15:57 UTC 2024","failed","Wed Oct 16 16:15:58 UTC 2024","","test_v_agg_data_additional","",""
+"
+Verifies that the device segments specified in the v_agg_data view match those present in the device_segments table.
+","1021","test_v_agg_data_proper_segment_use","tests","Wed Oct 16 16:15:50 UTC 2024","passed","Wed Oct 16 16:15:51 UTC 2024","","test_v_agg_data","",""
+"
+Verifies the uniqueness of records in the device_segments table based on the combination of device_model and segment, 
+ensuring no duplicates, which is critical for data integrity.
+","1399","test_device_segments_uniqueness","tests","Wed Oct 16 16:15:39 UTC 2024","failed","Wed Oct 16 16:15:40 UTC 2024","","test_data_in_tables","",""
+"Testing that there are no app installations before January 1, 2020.","1491","test_install_date_post_2020","tests","Wed Oct 16 16:15:45 UTC 2024","passed","Wed Oct 16 16:15:46 UTC 2024","","test_v_agg_data","",""
+"
+Verifies that every app_id from the agg_data table has a corresponding entry in the app_names table, ensuring data 
+consistency between tables.
+","997","test_app_names_consistency","tests","Wed Oct 16 16:15:42 UTC 2024","passed","Wed Oct 16 16:15:43 UTC 2024","","test_data_in_tables","",""
+"
+Verifies that 'non_target_device' is used in the v_agg_data view only when there are no device segments available in the device_segments table.
+","1062","test_non_target_device_usage","tests","Wed Oct 16 16:15:51 UTC 2024","failed","Wed Oct 16 16:15:52 UTC 2024","","test_v_agg_data","",""
+"
+Tests the data type consistency for the installs column in the v_agg_data view. 
+Checks that all values are numeric and correctly cast to INT64.
+","1112","test_data_type_consistency","tests","Wed Oct 16 16:15:54 UTC 2024","passed","Wed Oct 16 16:15:55 UTC 2024","","test_v_agg_data_additional","",""
+"
+Verifies that each device segment from v_agg_data exists in device_segments or is marked as 'non_target_device'.
+","1453","test_v_agg_data_segment_existence","tests","Wed Oct 16 16:15:58 UTC 2024","passed","Wed Oct 16 16:16:00 UTC 2024","","test_v_agg_data_additional","",""
+"
+Tests for unrealistic high installation values in the v_agg_data view. 
+Checks that for all applications, the total number of installs does not exceed the set threshold.
+","1926","test_unrealistic_high_installs","tests","Wed Oct 16 16:15:55 UTC 2024","passed","Wed Oct 16 16:15:57 UTC 2024","","test_v_agg_data_additional","",""
+"
+Verifies the app_names table to ensure there are no duplicate app_ids where the same app_id is associated with different 
+app_name or platform. 
+","752","test_app_names_no_duplicate_ids","tests","Wed Oct 16 16:15:43 UTC 2024","passed","Wed Oct 16 16:15:44 UTC 2024","","test_data_in_tables","",""

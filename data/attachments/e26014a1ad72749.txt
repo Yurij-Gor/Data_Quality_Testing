@@ -1,5 +1,5 @@
 
-        -- Выборка имен приложений и подсчет установок, где модель устройства не указана или пустая строка
+        -- Select app names and count installs where the device model is undefined or an empty string
         SELECT app_name, COUNT(*) as total_installs
         FROM `data-quality-project-1.dq_data_set.v_agg_data`
         WHERE device_model IS NULL OR device_model = ''

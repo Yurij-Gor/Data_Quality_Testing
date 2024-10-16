@@ -1,0 +1,7 @@
+
+        -- Check data type consistency for the installs column in the v_agg_data view
+        -- Select records where casting installs to INT64 returns NULL, indicating invalid data
+        SELECT install_date, installs
+        FROM `data-quality-project-1.dq_data_set.v_agg_data`
+        WHERE SAFE_CAST(installs AS INT64) IS NULL
+    

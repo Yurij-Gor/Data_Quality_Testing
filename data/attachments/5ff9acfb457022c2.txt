@@ -1,0 +1,6 @@
+
+        SELECT app_name, device_model, install_date, installs, device_segment, COUNT(*) as cnt
+        FROM `data-quality-project-1.dq_data_set.v_agg_data`  -- From the v_agg_data view
+        GROUP BY app_name, device_model, install_date, installs, device_segment  -- Group by key fields
+        HAVING cnt > 1  -- Condition to select groups with more than one record (duplicates)
+    

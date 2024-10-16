@@ -1,0 +1,9 @@
+
+        -- Select the device model and device segment from the v_agg_data view
+        SELECT device_model, device_segment
+        FROM `data-quality-project-1.dq_data_set.v_agg_data`
+        -- Condition to filter records where the device segment is either unspecified (NULL)
+        -- or explicitly marked as 'non_target_device'. This helps identify
+        -- non-target device segments that may require additional data correction actions.
+        WHERE device_segment IS NULL OR device_segment = 'non_target_device'
+    

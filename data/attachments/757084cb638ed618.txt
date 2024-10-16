@@ -1,0 +1,8 @@
+
+        -- Count the number of records where the number of installations is less than or equal to zero
+        SELECT COUNT(*) as cnt
+        -- Access the v_agg_data table
+        FROM `data-quality-project-1.dq_data_set.v_agg_data`
+        -- Condition to filter records by the number of installations
+        WHERE installs <= 0
+    

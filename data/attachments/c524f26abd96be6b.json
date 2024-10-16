@@ -4,15 +4,15 @@
         "expected_segments": "01_Top"
     },
     {
-        "device_model": "iphone 13",
-        "expected_segments": "03_Mid2"
-    },
-    {
         "device_model": "redmi 13",
         "expected_segments": "01_Top,01_Top"
     },
     {
         "device_model": "redmi 5",
         "expected_segments": "05_Low"
+    },
+    {
+        "device_model": "iphone 13",
+        "expected_segments": "03_Mid2"
     }
 ]

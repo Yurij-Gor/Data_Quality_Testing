@@ -1,0 +1,8 @@
+
+        -- Calculate the number of records where the app installation date is before January 1, 2020
+        SELECT COUNT(*) as cnt
+        -- From the v_agg_data table,
+        FROM `data-quality-project-1.dq_data_set.v_agg_data`
+        -- Condition to filter records by installation date
+        WHERE install_date < '2020-01-01'
+    

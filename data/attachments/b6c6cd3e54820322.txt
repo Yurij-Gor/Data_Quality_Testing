@@ -1,0 +1,16 @@
+
+    SELECT 
+      v.device_model, 
+      v.device_segment,
+      CASE 
+        WHEN d.device_model IS NULL THEN 'Missing'  -- If there's no match in the device_segments table, set status to 'Missing'
+        ELSE 'Present'  -- If there's a match, set status to 'Present'
+      END AS segment_status
+    FROM (
+      SELECT DISTINCT device_model, device_segment
+      FROM `data-quality-project-1.dq_data_set.v_agg_data`  -- Select unique pairs of device model and segment from v_agg_data
+      WHERE device_segment != 'non_target_device'  -- Exclude the 'non_target_device' segment as it doesn't need validation
+    ) AS v
+    LEFT JOIN `data-quality-project-1.dq_data_set.device_segments` AS d  -- Join the device_segments table
+    ON v.device_model = d.device_model AND v.device_segment = d.segment  -- Join condition: matching model and segment
+    

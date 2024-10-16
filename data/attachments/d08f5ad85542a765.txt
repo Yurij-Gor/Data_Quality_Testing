@@ -1,0 +1,15 @@
+
+    -- Select device models marked as 'non_target_device' and check their presence in the device_segments table.
+    -- If the model exists in device_segments, it indicates incorrect use of the 'non_target_device' label.
+    SELECT 
+      v.device_model, 
+      STRING_AGG(d.segment) AS expected_segments  -- Aggregate all segments associated with the device model into a string.
+    FROM (
+      SELECT DISTINCT device_model  -- Select unique device models labeled as 'non_target_device' from v_agg_data.
+      FROM `data-quality-project-1.dq_data_set.v_agg_data`
+      WHERE device_segment = 'non_target_device'
+    ) v
+    LEFT JOIN `data-quality-project-1.dq_data_set.device_segments` d ON v.device_model = d.device_model  -- Join with device_segments to check model existence.
+    GROUP BY v.device_model
+    HAVING COUNT(d.segment) > 0  -- Select only cases where the model has at least one segment in device_segments.
+    

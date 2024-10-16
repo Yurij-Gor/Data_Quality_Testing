@@ -3,192 +3,192 @@ from test_helpers.helpers import execute_query_and_log
 
 
 @allure.severity(allure.severity_level.CRITICAL)
-@allure.description("Тестирование того, что даты установки приложений находятся в ожидаемом диапазоне.")
+@allure.description("Testing that the application installation dates are within the expected range.")
 @allure.story('View_Creation')
 def test_date_range(setup):
     """
-    Тестирование, что даты установки приложений находятся в ожидаемом диапазоне.
+    Tests that application installation dates are within the expected range.
     """
-    bq_client, env = setup  # Используем фикстуру setup для получения клиента BigQuery и конфигурации
-    v_agg_data = env.get_full_table_id('v_agg_data')  # Получаем полный ID таблицы v_agg_data
+    bq_client, env = setup  # Use the setup fixture to get the BigQuery client and configuration
+    v_agg_data = env.get_full_table_id('v_agg_data')  # Retrieve the full ID of the v_agg_data table
     start_date = "2020-01-01"
 
-    # Формируем запрос для проверки диапазона дат
+    # Formulate the query to check the date range
     query = f"""
-    -- Выборка записей с датами установки за пределами ожидаемого диапазона
-    -- Условие проверяет, что дата установки не раньше '{start_date}' и не позднее текущей даты
+    -- Select records with installation dates outside the expected range
+    -- The condition checks that the installation date is not earlier than '{start_date}' and not later than the current date
     SELECT COUNT(*) as cnt
     FROM `{v_agg_data}`
     WHERE install_date < '{start_date}' OR install_date > CURRENT_DATE()
     """
 
-    # Используем вспомогательную функцию для выполнения запроса и логирования в Allure
-    results = execute_query_and_log(bq_client, query, "Проверка дат установки в ожидаемом диапазоне",
+    # Use the helper function to execute the query and log it in Allure
+    results = execute_query_and_log(bq_client, query, "Checking installation dates within the expected range",
                                     include_query_in_message=False)
-    count_out_of_range = next(results).cnt  # Получаем количество записей за пределами диапазона
+    count_out_of_range = next(results).cnt  # Get the count of records outside the range
 
-    # Проверка, что нет записей с датами установки вне заданного диапазона
-    with allure.step(f"Проверка, что нет записей с датами установки вне диапазона после {start_date} и до текущей даты"):
-        assert count_out_of_range == 0, f"Найдены установки с датами вне диапазона после {start_date} и до текущей даты"
+    # Check that there are no records with installation dates outside the specified range
+    with allure.step(f"Verifying that there are no records with installation dates outside the range after {start_date} and before the current date"):
+        assert count_out_of_range == 0, f"Found installations with dates outside the range after {start_date} and before the current date"
 
 
 @allure.story('View_Creation')
 @allure.severity(allure.severity_level.NORMAL)
 @allure.description("""
-Тестирование согласованности типов данных в столбце installs представления v_agg_data. 
-Проверяется, что все значения являются числовыми и корректно приводятся к типу INT64.
+Tests the data type consistency for the installs column in the v_agg_data view. 
+Checks that all values are numeric and correctly cast to INT64.
 """)
 def test_data_type_consistency(setup):
     """
-    Тестирование согласованности типов данных для вьюхи v_agg_data.
+    Tests the data type consistency for the v_agg_data view.
     """
     bq_client, env = setup
     v_agg_data = env.get_full_table_id('v_agg_data')
 
-    # Формируем SQL запрос для проверки, что все значения в столбце installs могут быть безопасно приведены к типу INT64
-    # и не содержат некорректные данные.
+    # Formulate the SQL query to check that all values in the installs column can be safely cast to INT64
+    # and do not contain invalid data.
     query_installs = f"""
-        -- Проверка согласованности типов данных столбца installs в представлении v_agg_data
-        -- Выбираем записи, где приведение installs к INT64 возвращает NULL, указывая на некорректные данные
+        -- Check data type consistency for the installs column in the v_agg_data view
+        -- Select records where casting installs to INT64 returns NULL, indicating invalid data
         SELECT install_date, installs
         FROM `{v_agg_data}`
         WHERE SAFE_CAST(installs AS INT64) IS NULL
     """
 
-    # Используем вспомогательную функцию для выполнения запроса и логирования его в Allure.
-    results = execute_query_and_log(bq_client, query_installs, "Проверка типов данных столбца installs",
+    # Use the helper function to execute the query and log it in Allure.
+    results = execute_query_and_log(bq_client, query_installs, "Checking data types for installs column",
                                     include_query_in_message=False)
 
-    # Собираем список записей с потенциально некорректными значениями installs.
+    # Collect the list of records with potentially invalid values in installs.
     """ 
-    Проходимся по каждой строке результата запроса. Для каждой строки создаем кортеж, содержащий дату установки 
-    (install_date) и количество установок (installs). Для доступа к атрибуту 'installs' используем функцию getattr(), 
-    которая позволяет безопасно получить значение атрибута по его имени (в данном случае 'installs'). 
-    Если атрибут 'installs' отсутствует в строке (что не должно происходить, но проверка на всякий случай), функция 
-    вернет значение None. Таким образом, failed_installs будет содержать список кортежей, каждый из которых 
-    соответствует строке в результате запроса, где количество установок не удалось привести к типу INT64 
-    (то есть, где условие SAFE_CAST(installs AS INT64) IS NULL истинно).Это список записей, которые потенциально 
-    содержат некорректные данные в столбце installs.
+    We iterate through each row in the query result. For each row, we create a tuple containing the installation date 
+    (install_date) and the number of installs (installs). To access the attribute 'installs', we use the function getattr(), 
+    which allows us to safely retrieve the attribute value by its name (in this case, 'installs'). 
+    If the attribute 'installs' is missing from the row (which shouldn't happen, but we check just in case), the function 
+    will return None. Thus, failed_installs will contain a list of tuples, each corresponding to a row in the query result 
+    where the number of installs couldn't be cast to INT64 
+    (i.e., where the condition SAFE_CAST(installs AS INT64) IS NULL is true). This list contains records that potentially 
+    have invalid data in the installs column.
     """
     failed_installs = [(row.install_date, getattr(row, 'installs', None)) for row in results]
 
-    # Проверяем, что список failed_installs пуст, что означает отсутствие некорректных типов данных в installs.
-    with allure.step("Проверка на отсутствие записей с некорректными типами данных в installs"):
-        assert len(failed_installs) == 0, f"Найдены записи с некорректными значениями installs: {failed_installs}"
+    # Ensure the list is empty, indicating no invalid data types in installs.
+    with allure.step("Verifying that there are no records with incorrect data types in installs"):
+        assert len(failed_installs) == 0, f"Records with invalid installs values found: {failed_installs}"
 
 
 @allure.severity(allure.severity_level.CRITICAL)
 @allure.description("""
-Тестирование на наличие неправдоподобно высоких значений установок в представлении v_agg_data. 
-Проверяется, что для всех приложений суммарное количество установок не превышает установленный порог.
+Tests for unrealistic high installation values in the v_agg_data view. 
+Checks that for all applications, the total number of installs does not exceed the set threshold.
 """)
 @allure.story('View_Creation')
 def test_unrealistic_high_installs(setup):
     """
-    Тестирование на наличие неправдоподобно высоких значений установок.
+    Tests for unrealistic high installation values.
     """
     bq_client, env = setup
     v_agg_data = env.get_full_table_id('v_agg_data')
-    threshold = 1000000  # условный порог для определения неправдоподобно высоких значений
+    threshold = 1000000  # Threshold for identifying unrealistic high values
 
-    # Формируем запрос для подсчета суммарного количества установок для каждого приложения и фильтрации тех,
-    # чье количество установок превышает установленный порог.
+    # Formulate the query to count the total number of installs per application and filter those exceeding the threshold.
     query = f"""
-        -- Подсчет суммарного количества установок для каждого приложения
+        -- Count total installs per application
         SELECT app_name, SUM(installs) as total_installs
         FROM `{v_agg_data}`
-        -- Группировка по названию приложения
+        -- Group by application name
         GROUP BY app_name
-        -- Фильтрация приложений, суммарное количество установок которых превышает установленный порог
+        -- Filter applications where total installs exceed the set threshold
         HAVING total_installs > {threshold}
     """
 
-    # Используем нашу вспомогательную функцию для выполнения запроса и логирования его в Allure.
+    # Use the helper function to execute the query and log it in Allure.
     results = execute_query_and_log(bq_client, query,
-                                    f"Проверка наличия неправдоподобно высоких значений установок, порог: {threshold}",
+                                    f"Checking for unrealistic high install values, threshold: {threshold}",
                                     include_query_in_message=False)
 
-    # Преобразуем результаты в список для подсчета их количества
+    # Convert the results to a list for further analysis
     excessive_installs = [(row.app_name, row.total_installs) for row in results]
 
-    # Проверяем, что нет приложений с установками, превышающими установленный порог.
-    with allure.step(f"Проверка, что нет приложений с установками превышающими {threshold}"):
-        assert len(excessive_installs) == 0, (f"Найдены приложения с неправдоподобно высокими значениями установок: "
+    # Verify no applications exceed the install threshold
+    with allure.step(f"Verifying that no applications exceed {threshold} installs"):
+        assert len(excessive_installs) == 0, (f"Applications with unrealistic high install values found: "
                                               f"{excessive_installs}")
 
 
 @allure.story('View_Creation')
 @allure.severity(allure.severity_level.NORMAL)
 @allure.description("""
-Тест проверяет наличие установок приложений с неопределенной моделью устройства в представлении v_agg_data.
+Tests for application installs with undefined device models in the v_agg_data view.
 """)
 def test_undefined_device_model_installs(setup):
     """
-    Тестирование наличия установок приложений с неопределенной моделью устройства.
+    Tests for application installs with undefined device models.
     """
     bq_client, env = setup
     v_agg_data = env.get_full_table_id('v_agg_data')
 
-    # Сформируем запрос для выборки имен приложений и подсчета установок, где модель устройства не указана или является пустой строкой.
+    # Formulate the query to select app names and count installs where the device model is undefined or empty.
     query = f"""
-        -- Выборка имен приложений и подсчет установок, где модель устройства не указана или пустая строка
+        -- Select app names and count installs where the device model is undefined or an empty string
         SELECT app_name, COUNT(*) as total_installs
         FROM `{v_agg_data}`
         WHERE device_model IS NULL OR device_model = ''
         GROUP BY app_name
     """
 
-    # Используем вспомогательную функцию для выполнения запроса и логирования его в Allure.
-    results = execute_query_and_log(bq_client, query, "Поиск установок с неопределенной моделью устройства",
+    # Use the helper function to execute the query and log it in Allure.
+    results = execute_query_and_log(bq_client, query, "Checking for installs with undefined device models",
                                     include_query_in_message=False)
 
-    # Преобразуем результаты запроса в список кортежей для дальнейшего анализа.
+    # Convert query results to a list of tuples for further analysis.
     undefined_device_model_installs = [(row.app_name, row.total_installs) for row in results]
 
-    # Если найдены установки с неопределенной моделью устройства, составляем сообщение об ошибке с деталями.
+    # If any installs with undefined device models are found, compile an error message with details.
     if len(undefined_device_model_installs) > 0:
-        error_message = "Обнаружены установки приложений с неопределенной моделью устройства:\n"
+        error_message = "Applications with undefined device model installs found:\n"
         for app_name, total_installs in undefined_device_model_installs:
-            error_message += f"Приложение: {app_name}, Количество установок: {total_installs}\n"
+            error_message += f"App Name: {app_name}, Install Count: {total_installs}\n"
         assert False, error_message
     else:
-        assert True, "Не найдены установки с неопределенной моделью устройства."
+        assert True, "No installs found with undefined device models."
 
 
 @allure.story('View_Creation')
 @allure.severity(allure.severity_level.CRITICAL)
 @allure.description("""
-Проверяет, что каждый сегмент устройства из v_agg_data существует в device_segments или помечен как 'non_target_device'.
+Verifies that each device segment from v_agg_data exists in device_segments or is marked as 'non_target_device'.
 """)
 def test_v_agg_data_segment_existence(setup):
     """
-    Проверяет, что каждый сегмент устройства из v_agg_data существует в device_segments или помечен как 'non_target_device'.
+    Verifies that each device segment from v_agg_data exists in device_segments or is marked as 'non_target_device'.
     """
     bq_client, env = setup
     v_agg_data = env.get_full_table_id('v_agg_data')
     device_segments = env.get_full_table_id('device_segments')
 
-    # Формируем запрос для проверки существования каждого сегмента устройства из представления v_agg_data в таблице device_segments,
-    # исключая сегмент 'non_target_device'. Этот запрос использует подзапрос с EXISTS для проверки наличия соответствующего сегмента в device_segments.
+    # Formulate the query to check the existence of each device segment from v_agg_data in device_segments,
+    # excluding the 'non_target_device' segment. This query uses a subquery with EXISTS to check if the corresponding
+    # segment exists in device_segments.
     query = f"""
-        -- Выборка уникальных сегментов устройства из представления v_agg_data
+        -- Select unique device segments from v_agg_data
         SELECT DISTINCT v.device_segment
         FROM `{v_agg_data}` v
-        -- Фильтрация сегментов, отличных от 'non_target_device', и проверка их наличия в device_segments
+        -- Filter segments other than 'non_target_device' and check their existence in device_segments
         WHERE v.device_segment <> 'non_target_device' AND NOT EXISTS (
-            -- Подзапрос проверяет наличие сегмента из v_agg_data в таблице device_segments.
-            -- 'SELECT 1' используется для проверки существования записи: возвращает 1, если запись найдена.
+            -- Subquery checks if the segment from v_agg_data exists in device_segments.
+            -- 'SELECT 1' is used to verify the existence of the record: returns 1 if a record is found.
             SELECT 1
             FROM `{device_segments}` ds
             WHERE v.device_segment = ds.segment
         )
     """
-    # Выполнение запроса и логирование его в Allure с помощью функции execute_query_and_log.
-    results = execute_query_and_log(bq_client, query, "Проверка существования сегментов устройства",
+    # Execute the query and log it in Allure using the execute_query_and_log function.
+    results = execute_query_and_log(bq_client, query, "Verifying device segment existence",
                                     include_query_in_message=False)
 
-    # Преобразуем результаты запроса в список отсутствующих сегментов устройства.
+    # Convert the query results to a list of missing device segments.
     missing_segments = [row.device_segment for row in results]
 
-    # Если найдены отсутствующие сегменты, составляем сообщение об ошибке.
-    assert len(missing_segments) == 0, f"Найдены отсутствующие сегменты устройств в v_agg_data, которых нет в device_segments: {missing_segments}"
+    # If missing segments are found, compile an error message.
+    assert len(missing_segments) == 0, f"Missing device segments found in v_agg_data that are not present in device_segments: {missing_segments}"

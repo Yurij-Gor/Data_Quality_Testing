@@ -1,0 +1,9 @@
+
+        -- Find duplicates based on the combination of device_model and segment
+        -- This helps ensure that each device model and segment is uniquely identified in the table
+        SELECT device_model, segment, COUNT(*) as cnt
+        FROM `data-quality-project-1.dq_data_set.device_segments`
+        GROUP BY device_model, segment
+        -- Filter groups with more than one record, indicating the presence of duplicates
+        HAVING cnt > 1
+    

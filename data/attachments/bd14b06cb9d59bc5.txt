@@ -1,0 +1,11 @@
+
+        SELECT app_id, COUNT(DISTINCT app_name) as unique_app_names, COUNT(DISTINCT platform) as unique_platforms
+        FROM `data-quality-project-1.dq_data_set.app_names`
+        GROUP BY app_id
+        -- Group records by app_id to aggregate data. This allows us to count the number of
+        -- unique app_name and platform values associated with each app_id.
+        -- The HAVING condition is applied after grouping to filter out groups where
+        -- the number of unique app_name or platform values exceeds 1. This indicates duplicates:
+        -- cases where a single app_id is associated with multiple names or platforms.
+        HAVING unique_app_names > 1 OR unique_platforms > 1
+    

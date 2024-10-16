@@ -1,0 +1,11 @@
+
+        -- Query to verify consistency of app names and platforms between app_names and device_segments tables.
+        -- Uses LEFT JOIN to link records from app_names with corresponding records in device_segments.
+        -- The condition ON an.app_name = ds.app_short AND an.platform = ds.platform ensures matching on both key fields.
+        -- The condition WHERE ds.app_short IS NULL OR ds.platform IS NULL filters cases where corresponding records in device_segments are missing,
+        -- indicating inconsistency between the tables.  
+        SELECT an.app_name, an.platform
+        FROM `data-quality-project-1.dq_data_set.app_names` an
+        LEFT JOIN `data-quality-project-1.dq_data_set.device_segments` ds ON an.app_name = ds.app_short AND an.platform = ds.platform
+        WHERE ds.app_short IS NULL OR ds.platform IS NULL
+    

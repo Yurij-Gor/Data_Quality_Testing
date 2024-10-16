@@ -1,0 +1,10 @@
+
+        -- Performs a LEFT JOIN between the agg_data and app_names tables using the app_id column.
+        -- This allows us to verify each app_id from agg_data to ensure there is a corresponding record in app_names.
+        -- If a corresponding record in app_names is not found (i.e., the result of the JOIN is NULL for this row),
+        -- such app_ids are considered "missing" in app_names.
+        SELECT ad.app_id
+        FROM `data-quality-project-1.dq_data_set.agg_data` ad
+        LEFT JOIN `data-quality-project-1.dq_data_set.app_names` an ON ad.app_id = an.app_id
+        WHERE an.app_id IS NULL  -- Only selects app_ids that do not have a match in app_names.
+    

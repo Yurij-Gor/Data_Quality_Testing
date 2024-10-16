@@ -1,0 +1,13 @@
+
+        -- Select distinct device models from the agg_data table after converting them to uppercase
+        SELECT DISTINCT UPPER(agg.device_model) AS device_model_upper
+        -- Specify the agg_data table from which the data will be selected, using the alias 'agg'
+        FROM `data-quality-project-1.dq_data_set.agg_data` agg
+        -- Select device models that do not exist in the device_segments table
+        WHERE UPPER(agg.device_model) NOT IN (
+          -- Subquery to select distinct device models from the device_segments table after converting them to uppercase
+          SELECT DISTINCT UPPER(ds.device_model)
+          -- Specify the device_segments table from which data will be selected for the subquery, using the alias 'ds'
+          FROM `data-quality-project-1.dq_data_set.device_segments` ds
+        )
+    

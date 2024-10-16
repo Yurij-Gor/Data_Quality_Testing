@@ -1,0 +1,14 @@
+
+        -- Select data about apps and device models
+        SELECT agg.app_id, agg.device_model, an.app_name, an.platform
+        -- From the agg_data table using the alias 'agg'
+        FROM `data-quality-project-1.dq_data_set.agg_data` agg
+        -- Join the app_names table using the alias 'an' by app_id
+        JOIN `data-quality-project-1.dq_data_set.app_names` an ON agg.app_id = an.app_id
+        -- Left join with the device_segments table using the alias 'ds' by device model, case insensitive
+        LEFT JOIN `data-quality-project-1.dq_data_set.device_segments` ds ON UPPER(agg.device_model) = UPPER(ds.device_model)
+            -- Also check for matching app name and platform between app_names and device_segments
+            AND an.app_name = ds.app_short AND an.platform = ds.platform
+        -- Condition to select records that do not have a corresponding device model in device_segments
+        WHERE ds.device_model IS NULL
+    

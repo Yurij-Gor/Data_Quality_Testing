@@ -1,5 +1,5 @@
 
-        -- Поиск записей в agg_data с датой установки ранее '2020-01-01'
+        -- Find records in agg_data with an installation date earlier than '2020-01-01'
         SELECT COUNT(*) as cnt
         FROM `data-quality-project-1.dq_data_set.agg_data`
         WHERE install_date < '2020-01-01'

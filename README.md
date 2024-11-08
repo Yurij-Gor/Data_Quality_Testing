@@ -90,13 +90,13 @@ Each test is annotated with detailed descriptions and categorized according to s
 To run the tests with detailed output and generate an Allure report, use the following command:
 
 ```bash
-python -m pytest -vv --alluredir=<PathToTestResults> tests/
+pytest --alluredir=test_results/ tests/
 ```
 
-To generate and open the Allure report in a web browser:
+After running the tests, create a report by running:
 
 ```bash
-allure serve <PathToTestResults>
+allure serve test_results
 ```
 
 ### Running Tests with Docker
@@ -112,9 +112,8 @@ docker-compose up --build
 To copy the Allure report from the Docker container to your local machine and open it:
 
 ```bash
-# Replace <ContainerName> with your actual running container's name
-# and <LocalPathToStoreResults> with the local path where you want to store the test results
-docker cp <ContainerName>:/tests_project/test_results <LocalPathToStoreResults>
+# Replace <LocalPathToStoreResults> with the local path where you want to store the test results
+docker cp data_quality_tests:/tests_project/test_results <LocalPathToStoreResults>
 
 # To serve the Allure report, navigate to the directory where the results are stored and run:
 allure serve <LocalPathToStoreResults>/test_results
@@ -123,7 +122,7 @@ Remember to clean up after your Docker environment once you're done:
 ```bash
 docker-compose down
 ```
-Ensure to replace &lt;PathToTestResults&gt;, &lt;ContainerName&gt;, and &lt;LocalPathToStoreResults&gt; with the actual paths and names relevant to your project.
+Ensure to replace &lt;LocalPathToStoreResults&gt; with the actual paths and names relevant to your project.
 
 ## GitHub Actions Workflow
 The CI/CD pipeline is defined in .github/workflows/ci.yml.

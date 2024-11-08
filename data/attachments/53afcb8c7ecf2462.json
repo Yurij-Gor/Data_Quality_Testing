@@ -1,10 +1,10 @@
 [
     {
-        "app_name": "fd_gp",
-        "total_installs": 1
-    },
-    {
         "app_name": "hs_as",
         "total_installs": 8
+    },
+    {
+        "app_name": "fd_gp",
+        "total_installs": 1
     }
 ]
